@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>2128 Bathroom Reno — Updated Scope</title>
+<meta name="description" content="Updated scope and change list for the 2128 bathroom renovation. English / Español.">
+<meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15140f" media="(prefers-color-scheme: dark)">
+<style>
+  :root{
+    --paper:#fbfaf7;
+    --card:#ffffff;
+    --ink:#17160f;
+    --muted:#6d6860;
+    --rule:#dcd7cc;
+    --flag:#bd2f1b;
+    --done:#2c6a3f;
+    --chip:#efece4;
+    --focus:#1b5fbf;
+    --warnbg:#fff5e0;
+    --warnrule:#e0b25e;
+    --warnink:#7a5100;
+    --hh:150px;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#15140f;
+      --card:#1d1c17;
+      --ink:#f2efe6;
+      --muted:#a29b8e;
+      --rule:#3a382f;
+      --flag:#ef6a52;
+      --done:#5aa872;
+      --chip:#2b2921;
+      --focus:#7fb0ff;
+      --warnbg:#2b2416;
+      --warnrule:#7a5f24;
+      --warnink:#e5c98a;
+    }
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    font-size:17px;
+    line-height:1.45;
+    overflow-wrap:break-word;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding:0 16px 80px}
+
+  /* ---------- top bar ---------- */
+  header{
+    position:sticky;top:0;z-index:30;
+    background:var(--paper);
+    border-bottom:2px solid var(--ink);
+    padding-top:env(safe-area-inset-top);
+  }
+  .bar{max-width:820px;margin:0 auto;padding:8px 16px 0}
+  .titlerow{display:flex;align-items:center;justify-content:space-between;gap:10px;overflow:hidden}
+  /* reclaim screen height once the user starts scrolling */
+  header.tight .titlerow{height:0;margin:0;opacity:0;pointer-events:none}
+  header.tight .prog{display:none}
+  h1{font-size:17px;margin:0;letter-spacing:-.01em;font-weight:800;line-height:1.2}
+  h1 span{display:block;font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-top:3px}
+  .lang{display:flex;border:2px solid var(--ink);border-radius:3px;overflow:hidden;flex:0 0 auto}
+  .lang button{
+    font:inherit;font-size:13px;font-weight:800;letter-spacing:.06em;
+    background:transparent;color:var(--ink);border:0;padding:0 12px;cursor:pointer;min-height:38px;
+  }
+  .lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+  nav.tabs{display:flex;margin-top:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  nav.tabs button{
+    font:inherit;font-size:14.5px;font-weight:700;white-space:nowrap;
+    background:transparent;border:0;border-bottom:3px solid transparent;
+    padding:9px 14px;margin:0;cursor:pointer;color:var(--muted);min-height:44px;flex:1 0 auto;
+  }
+  nav.tabs button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--flag)}
+
+  /* jump chips */
+  .jump{display:flex;gap:7px;padding:7px 0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+        border-top:1px solid var(--rule);scrollbar-width:none}
+  .jump::-webkit-scrollbar{display:none}
+  .jump a{
+    flex:0 0 auto;font-size:12.5px;font-weight:700;text-decoration:none;color:var(--ink);
+    background:var(--chip);border:1px solid var(--rule);border-radius:99px;
+    padding:7px 12px;white-space:nowrap;letter-spacing:.02em;
+  }
+  .jump a b{color:var(--muted);font-weight:700;margin-left:5px}
+
+  /* progress strip */
+  .prog{
+    display:flex;align-items:center;gap:10px;
+    font-size:12.5px;color:var(--muted);padding:0 0 8px;
+  }
+  .prog .track{flex:1;height:6px;background:var(--chip);border-radius:99px;overflow:hidden}
+  .prog .fill{height:100%;width:0;background:var(--done);transition:width .2s}
+  .prog #pcount{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink);white-space:nowrap}
+  .prog button{
+    font:inherit;font-size:12px;font-weight:700;background:var(--chip);border:1px solid var(--rule);
+    color:var(--muted);border-radius:99px;cursor:pointer;padding:6px 10px;white-space:nowrap;min-height:34px;
+  }
+  .prog button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  /* ---------- sketch photo ---------- */
+  .shot{margin:16px 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--card);overflow:hidden}
+  .shot a{display:block;line-height:0;background:var(--chip)}
+  .shot img{width:100%;height:auto;display:block}
+  .shot .cap{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-size:12.5px;color:var(--muted);padding:9px 12px;border-top:1px solid var(--rule);line-height:1.4;
+  }
+  .shot .cap b{color:var(--ink);font-weight:700}
+  .shot .cap .tap{flex:0 0 auto;font-weight:800;color:var(--focus);text-decoration:none}
+  .missing{
+    display:none;padding:20px 14px;font-size:14px;line-height:1.5;color:var(--warnink);
+    background:var(--warnbg);border-bottom:1px solid var(--warnrule);
+  }
+  .missing code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em;
+    background:var(--chip);color:var(--ink);padding:1px 5px;border-radius:3px}
+  .shot.noimg #shotlink,.shot.noimg .tap{display:none}
+  .shot.noimg .missing{display:block}
+
+  /* ---------- open questions ---------- */
+  .open{
+    margin:16px 0 0;border:2px solid var(--flag);border-radius:4px;background:var(--card);
+    padding:13px 14px 4px;
+  }
+  .open h3{
+    margin:0 0 9px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+    font-weight:800;color:var(--flag);
+  }
+  .open ul{margin:0;padding:0 0 0 20px}
+  .open li{margin:0 0 10px;font-size:15px;line-height:1.45}
+
+  .lede{font-size:14.5px;color:var(--muted);margin:16px 0 0;line-height:1.5}
+
+  /* ---------- sections ---------- */
+  section{margin:26px 0 0;scroll-margin-top:calc(var(--hh) + 8px)}
+  details{border-top:2px solid var(--ink)}
+  summary{
+    display:flex;align-items:center;gap:9px;justify-content:space-between;
+    list-style:none;cursor:pointer;padding:11px 2px;
+    font-size:13px;letter-spacing:.11em;text-transform:uppercase;font-weight:800;
+    position:sticky;top:var(--hh);background:var(--paper);z-index:10;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary .meta{
+    display:flex;align-items:center;gap:9px;flex:0 0 auto;
+    font-size:12px;letter-spacing:.04em;color:var(--muted);font-weight:700;
+    font-variant-numeric:tabular-nums;text-transform:none;
+  }
+  summary .caret{transition:transform .15s;display:inline-block;font-size:11px}
+  details[open] summary .caret{transform:rotate(90deg)}
+  summary .meta.alldone{color:var(--done)}
+
+  ul.items{list-style:none;margin:0;padding:0 0 6px}
+  ul.items li{border-top:1px solid var(--rule)}
+  ul.items li:first-child{border-top:0}
+  label.item{display:flex;gap:13px;align-items:flex-start;padding:13px 2px;cursor:pointer}
+  label.item input{
+    appearance:none;-webkit-appearance:none;
+    flex:0 0 auto;width:27px;height:27px;margin:0;
+    border:2px solid var(--ink);border-radius:4px;background:transparent;cursor:pointer;
+    position:relative;top:1px;
+  }
+  label.item input:checked{background:var(--done);border-color:var(--done)}
+  label.item input:checked::after{
+    content:"";position:absolute;left:8px;top:3px;width:6px;height:13px;
+    border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg);
+  }
+  label.item input:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+  .txt{flex:1;min-width:0}
+  label.item input:checked ~ .txt{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--rule)}
+  .txt b{font-weight:700}
+  .who,.flag{
+    display:inline-block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+    font-weight:800;padding:3px 7px;border-radius:3px;margin-right:7px;vertical-align:1.5px;
+  }
+  .who{color:var(--muted);background:var(--chip)}
+  .flag{color:#fff;background:var(--flag)}
+  .dim{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.9em;font-weight:700;
+    background:var(--chip);padding:1px 5px;border-radius:3px;white-space:nowrap;
+  }
+  body.hidedone label.item input:checked{opacity:.5}
+  body.hidedone ul.items li.isdone{display:none}
+  .empty{padding:16px 2px;font-size:14px;color:var(--muted);font-style:italic}
+
+  /* ---------- notes ---------- */
+  ol.notes{margin:0;padding:6px 0 10px 22px}
+  ol.notes li{margin:0 0 13px;padding-left:4px}
+  ol.notes li::marker{font-weight:800;color:var(--muted)}
+
+  footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--muted);line-height:1.5}
+  footer .btn{
+    display:inline-block;margin-top:12px;font:inherit;font-size:13px;font-weight:700;
+    background:var(--chip);border:1px solid var(--rule);color:var(--ink);
+    border-radius:4px;padding:10px 14px;cursor:pointer;min-height:42px;
+  }
+
+  @media print{
+    header,.jump,.prog,.noprint,footer .btn{display:none!important}
+    body{font-size:10.5pt;background:#fff;color:#000}
+    .wrap{max-width:none;padding:0}
+    details{display:block!important}
+    details > summary{position:static}
+    section{page-break-inside:avoid}
+    label.item input{display:none}
+    .txt{text-decoration:none!important;color:#000!important}
+    .shot{border:1px solid #999}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="titlerow">
+      <h1 id="ttl">2128 Bathroom Reno<span id="sub">Updated scope — read before continuing</span></h1>
+      <div class="lang" role="group" aria-label="Language / Idioma">
+        <button id="l-en" aria-pressed="true">EN</button>
+        <button id="l-es" aria-pressed="false">ES</button>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs"></nav>
+    <div class="jump" id="jump"></div>
+    <div class="prog">
+      <span id="pcount">0 / 0</span>
+      <span class="track"><span class="fill" id="pfill"></span></span>
+      <button id="hidedone" aria-pressed="false"></button>
+      <button id="reset"></button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <figure class="shot" id="shot" style="margin-block:16px 0">
+    <div class="missing" id="shotmissing"></div>
+    <a href="sketch.jpeg" target="_blank" rel="noopener" id="shotlink">
+      <img src="sketch.jpeg" alt="Reference sketch: final decisions, tile layout, shower niche, arch, and lighting" id="shotimg">
+    </a>
+    <figcaption class="cap">
+      <span id="shotcap"></span>
+      <a class="tap" href="sketch.jpeg" target="_blank" rel="noopener" id="shottap"></a>
+    </figcaption>
+  </figure>
+
+  <div class="open" id="open"></div>
+
+  <p class="lede" id="lede"></p>
+
+  <div id="panel"></div>
+
+  <footer>
+    <span id="foot"></span><br>
+    <button class="btn noprint" id="printbtn" onclick="window.print()"></button>
+  </footer>
+</div>
+
+<script>
+/* ============ CONTENT ============ */
+var AREAS = [
+  {id:"shower", en:"Shower",         es:"Regadera",           short_en:"Shower", short_es:"Regadera"},
+  {id:"vanity", en:"Vanity Wall",    es:"Pared del Lavabo",   short_en:"Vanity", short_es:"Lavabo"},
+  {id:"toilet", en:"Toilet Area",    es:"Área del Inodoro",   short_en:"Toilet", short_es:"Inodoro"},
+  {id:"all",    en:"Whole Bathroom", es:"Todo el Baño",       short_en:"All",    short_es:"Todo"}
+];
+var TRADES = [
+  {id:"framing",    en:"Framing / Drywall", es:"Estructura / Drywall", short_en:"Framing", short_es:"Estructura"},
+  {id:"plumbing",   en:"Plumbing",          es:"Plomería",             short_en:"Plumbing",short_es:"Plomería"},
+  {id:"electrical", en:"Electrical",        es:"Electricidad",         short_en:"Elec.",   short_es:"Elec."},
+  {id:"tile",       en:"Tile",              es:"Azulejo",              short_en:"Tile",    short_es:"Azulejo"},
+  {id:"general",    en:"General / Layout",  es:"General / Trazo",      short_en:"General", short_es:"General"}
+];
+
+function d(s){return '<span class="dim">'+s+'</span>';}
+
+/* flag: "cancel" | "change" | null */
+var ITEMS = [
+/* ---- SHOWER ---- */
+{id:"s1", a:"shower", t:"framing", flag:"cancel",
+ en:'<b>Do NOT build the half wall.</b> Full glass enclosure instead.',
+ es:'<b>NO construir el medio muro.</b> Todo será vidrio.'},
+{id:"s2", a:"shower", t:"framing",
+ en:'Frame the niche on the <b>right side</b> — '+d('48" × 17"')+' finished opening. Confirm with the tile setter before closing it up.',
+ es:'Enmarcar el nicho del <b>lado derecho</b> — abertura terminada de '+d('48" × 17"')+'. Confirmar con el azulejero antes de cerrar.'},
+{id:"s3", a:"shower", t:"framing",
+ en:'Blocking for the glass panel.',
+ es:'Refuerzo (blocking) para el panel de vidrio.'},
+{id:"s13", a:"shower", t:"framing",
+ en:'Leave the recess for the <b>plaster-in LED channel inside the niche</b>.',
+ es:'Dejar el espacio para el <b>canal LED empotrado dentro del nicho</b>.'},
+{id:"s4", a:"shower", t:"plumbing", flag:"change",
+ en:'Shower <b>controls → RIGHT short wall</b>.',
+ es:'<b>Llaves/controles → pared corta DERECHA</b>.'},
+{id:"s5", a:"shower", t:"plumbing",
+ en:'Showerheads + body sprays → <b>LEFT short wall</b> (opposite the controls).',
+ es:'Regaderas y rociadores → <b>pared corta IZQUIERDA</b> (lado opuesto a las llaves).'},
+{id:"s6", a:"shower", t:"plumbing",
+ en:'Rainfall head mounted in the <b>CEILING</b>.',
+ es:'Regadera tipo lluvia montada en el <b>TECHO</b>.'},
+{id:"s7", a:"shower", t:"plumbing",
+ en:'Slope the floor to the drain. Flutes run toward the drain.',
+ es:'Dar caída al piso hacia la coladera. Las ranuras corren hacia el desagüe.'},
+{id:"s8", a:"shower", t:"electrical",
+ en:'Low-voltage <b>LED inside the niche</b>, trimless plaster-in channel.',
+ es:'<b>LED de bajo voltaje dentro del nicho</b>, canal empotrado sin marco.'},
+{id:"s9", a:"shower", t:"tile",
+ en:'Walls: white subway '+d('8.5" × 2.5"')+' — <b>straight vertical stack, NO stagger</b>.',
+ es:'Paredes: subway blanco '+d('8.5" × 2.5"')+' — <b>alineado vertical, SIN traslape</b>.'},
+{id:"s10", a:"shower", t:"tile",
+ en:'Floor: fluted tile, run <b>long-ways as seen from the entrance</b>, flutes pointing toward the drain.',
+ es:'Piso: loseta acanalada, <b>a lo largo visto desde la entrada</b>, las ranuras apuntando a la coladera.'},
+{id:"s11", a:"shower", t:"tile",
+ en:'Niche: '+d('2×4')+' marble-look. Back face is <b>one full piece</b>; tile the return edges too.',
+ es:'Nicho: mármol '+d('2×4')+'. El fondo es <b>una sola pieza</b>; azulejar también los cantos.'},
+{id:"s12", a:"shower", t:"tile",
+ en:'<b>DRY-LAY FIRST.</b> Niche top and bottom must land on the subway grout lines.',
+ es:'<b>PRUEBA EN SECO PRIMERO.</b> Arriba y abajo del nicho deben caer en las juntas del subway.'},
+
+/* ---- VANITY ---- */
+{id:"v1", a:"vanity", t:"general",
+ en:'Vanity is '+d('48"L × 18"D × 20"H')+' — <b>FLOATING (wall-hung)</b>, countertop at '+d('36"')+' off the floor, pushed <b>ALL THE WAY LEFT</b>.',
+ es:'Mueble '+d('48" × 18" × 20"')+' — <b>FLOTANTE (colgado)</b>, cubierta a '+d('36"')+' del piso, pegado <b>TODO A LA IZQUIERDA</b>.'},
+{id:"v2", a:"vanity", t:"general",
+ en:'The ~'+d('18"')+' on the right stays <b>empty</b> (towel hook / plant stool).',
+ es:'Los ~'+d('18"')+' de la derecha se quedan <b>vacíos</b> (gancho de toalla / banco con planta).'},
+{id:"v3", a:"vanity", t:"general",
+ en:'Mirror <b>centered on the vanity</b>, not on the wall.',
+ es:'Espejo <b>centrado con el mueble</b>, no con la pared.'},
+{id:"v4", a:"vanity", t:"framing",
+ en:'<b>Blocking for the floating vanity</b> — '+d('48"')+' wide, top at '+d('36"')+'.',
+ es:'<b>Refuerzo para el mueble flotante</b> — '+d('48"')+' de ancho, cubierta a '+d('36"')+'.'},
+{id:"v5", a:"vanity", t:"framing",
+ en:'Recess for the hidden LED channel along the <b>top edge of the wall</b>.',
+ es:'Espacio para el canal LED oculto en el <b>borde superior de la pared</b>.'},
+{id:"v6", a:"vanity", t:"plumbing", flag:"change",
+ en:'<b>Verify the stub-outs</b> land behind the '+d('48"')+' cabinet, centered on the basin, high enough for a floating vanity. <b>Do this now — walls are open.</b>',
+ es:'<b>Verificar las salidas</b>: detrás del mueble de '+d('48"')+', centradas con el lavabo, a la altura correcta para mueble flotante. <b>Hacerlo AHORA que la pared está abierta.</b>'},
+{id:"v7", a:"vanity", t:"electrical", flag:"cancel",
+ en:'<b>Cancel the sconce boxes</b> on this wall. No sconces.',
+ es:'<b>Cancelar las cajas de las lámparas de pared</b> en esta pared. Sin sconces.'},
+{id:"v8", a:"vanity", t:"electrical",
+ en:'Hidden LED channel along the top edge — from the left edge to where the shower glass starts.',
+ es:'Canal LED oculto en el borde superior — del extremo izquierdo hasta donde empieza el vidrio.'},
+{id:"v9", a:"vanity", t:"electrical",
+ en:'<b>3-gang</b> in the existing box left of the vanity: <b>1)</b> vanity LED &nbsp;<b>2)</b> can lights &nbsp;<b>3)</b> exhaust fan.',
+ es:'<b>3 apagadores</b> en la caja existente a la izquierda del mueble: <b>1)</b> LED del mueble &nbsp;<b>2)</b> luces empotradas &nbsp;<b>3)</b> extractor.'},
+{id:"v10", a:"vanity", t:"tile",
+ en:'Tile: '+d('2×4')+' marble-look — <b>straight vertical stack, NO stagger</b>.',
+ es:'Azulejo: mármol '+d('2×4')+' — <b>alineado vertical, SIN traslape</b>.'},
+{id:"v11", a:"vanity", t:"tile",
+ en:'<b>Start with a FULL tile at TOP RIGHT.</b> Work left and down. Cuts land on the <b>left edge and bottom row only</b>. (See the sketch, top left.)',
+ es:'<b>Empezar con loseta COMPLETA ARRIBA A LA DERECHA.</b> Seguir a la izquierda y hacia abajo. Los cortes solo van en el <b>borde izquierdo y la fila de abajo</b>. (Ver el croquis, arriba a la izquierda.)'},
+{id:"v12", a:"vanity", t:"tile",
+ en:'Carry the grout lines <b>level across both walls</b> so they read continuous.',
+ es:'Mantener las juntas <b>niveladas entre las dos paredes</b> para que se vean continuas.'},
+
+/* ---- TOILET ---- */
+{id:"t1", a:"toilet", t:"framing", flag:"change",
+ en:'<b>Frame + drywall the ARCH</b> at the front of the nook (~'+d('32"W × 40"D')+'). Depth '+d('4"–5"')+' — <b>final number TBD</b> — deep enough for a shelf ledge. Toilet sits partly under it.',
+ es:'<b>Enmarcar y hacer el ARCO en drywall</b> al frente del espacio (~'+d('32" × 40"')+'). Fondo '+d('4"–5"')+' — <b>número final pendiente</b> — con repisa. El inodoro queda parcialmente debajo.'},
+{id:"t2", a:"toilet", t:"framing",
+ en:'Recess for the LED channel that outlines the arch.',
+ es:'Espacio para el canal LED que rodea el arco.'},
+{id:"t3", a:"toilet", t:"plumbing",
+ en:'Toilet floor rough-in is done — ready to set.',
+ es:'La salida de drenaje en el piso ya está lista — listo para instalar.'},
+{id:"t4", a:"toilet", t:"plumbing",
+ en:'<b>Water tap-off for the bidet</b> at the toilet.',
+ es:'<b>Toma de agua para el bidé</b> en el inodoro.'},
+{id:"t8", a:"toilet", t:"electrical",
+ en:'<b>GFCI outlet for the bidet</b> at the toilet. The bidet needs <b>both</b> water and power.',
+ es:'<b>Contacto GFCI para el bidé</b> en el inodoro. El bidé necesita <b>las dos cosas</b>: agua y electricidad.'},
+{id:"t5", a:"toilet", t:"electrical", flag:"cancel",
+ en:'<b>Cancel the single accent bulb</b> in the arch.',
+ es:'<b>Cancelar el foco de acento</b> del arco.'},
+{id:"t6", a:"toilet", t:"electrical", flag:"change",
+ en:'<b>Hidden LED channel outlining the whole arch.</b> Trimless plaster-in channel; the curve needs a <b>flexible channel + flexible strip</b>.',
+ es:'<b>Canal LED oculto que rodea todo el arco.</b> Canal empotrado sin marco (se resana); la curva necesita <b>canal y tira flexible</b>.'},
+{id:"t7", a:"toilet", t:"electrical",
+ en:'<b>2-gang</b> in the existing box on the wall left of the toilet, right of the additional door: <b>1)</b> arch LED &nbsp;<b>2)</b> niche LED.',
+ es:'<b>2 apagadores</b> en la caja existente en la pared a la izquierda del inodoro, a la derecha de la puerta adicional: <b>1)</b> LED del arco &nbsp;<b>2)</b> LED del nicho.'},
+
+/* ---- ALL ---- */
+{id:"a1", a:"all", t:"electrical",
+ en:'<b>All LEDs are 3000K</b> — uniform across the niche, vanity wall, and arch. <b>Owner supplies the switches / dimmers.</b>',
+ es:'<b>Todos los LED son de 3000K</b> — igual en nicho, pared del lavabo y arco. <b>El dueño compra los apagadores / dimmers.</b>'},
+{id:"a2", a:"all", t:"electrical", flag:"change",
+ en:'<b>Both switch boxes get DIMMERS.</b> Confirm a <b>NEUTRAL</b> is present in each one before the walls close.',
+ es:'<b>Las dos cajas llevan DIMMERS.</b> Confirmar que haya <b>NEUTRO</b> en cada una antes de cerrar las paredes.'},
+{id:"a3", a:"all", t:"electrical",
+ en:'Drivers must be <b>ELV / reverse-phase dimmable</b> and matched to the dimmer — wrong pairing means flicker and buzz.',
+ es:'Las fuentes (drivers) deben ser <b>ELV / fase inversa regulables</b> y compatibles con el dimmer — si no coinciden, parpadea y zumba.'},
+{id:"a4", a:"all", t:"tile",
+ en:'<b>Grout colors are still TBD.</b> Do not set anything until they are confirmed.',
+ es:'<b>El color de la lechada está pendiente.</b> No pegar nada hasta confirmar.'}
+];
+
+/* open:true items also surface in the red "Open Questions" box at the top */
+var CONSIDER = [
+ {open:true,
+  en:'<b>Final arch depth is still needed</b> — '+d('4"')+', '+d('5"')+', or match the toilet tank. The framer needs a number.',
+  es:'<b>Falta la profundidad final del arco</b> — '+d('4"')+', '+d('5"')+', o igual al tanque del inodoro. El carpintero necesita el número.'},
+ {open:true,
+  en:'<b>Grout colors</b> — pick one per tile type (niche marble, subway, fluted floor, vanity marble) before anyone sets.',
+  es:'<b>Color de lechada</b> — elegir uno por cada tipo de loseta antes de que alguien empiece a pegar.'},
+ {open:true,
+  en:'The '+d('48" × 17"')+' niche is <b>tile size only</b> — grout joints are not accounted for. Dry-lay before the framing closes.',
+  es:'El nicho '+d('48" × 17"')+' es <b>medida de loseta solamente</b> — no incluye las juntas. Prueba en seco antes de cerrar el enmarcado.'},
+ {open:true,
+  en:'<b>Neutral in both switch boxes.</b> The 2-gang was wired for a plain bulb — check for a neutral before the walls close, or the dimmers will not work.',
+  es:'<b>Neutro en las dos cajas.</b> La caja de 2 se cableó para un foco simple — revisar que haya neutro antes de cerrar, o los dimmers no funcionarán.'},
+ {open:true,
+  en:'<b>Verify vanity stub-out placement while the wall is open.</b> Cheap now, nightmare after tile.',
+  es:'<b>Verificar la posición de las salidas del lavabo con la pared abierta.</b> Barato ahora, carísimo después del azulejo.'},
+ {en:'<b>The niche return edges still need tile.</b> "One tile" only applies to the flat back face.',
+  es:'<b>Los cantos del nicho también llevan azulejo.</b> "Una sola loseta" aplica solo al fondo plano.'},
+ {en:'<b>The bidet needs water AND power</b> — confirm the water tap-off, not just the outlet.',
+  es:'<b>El bidé necesita agua Y electricidad</b> — confirmar la toma de agua, no solo el contacto.'},
+ {en:'<b>Two switch locations now.</b> Confirm the feeds so the arch LED is switched from the toilet-side box, not the old accent-bulb leg.',
+  es:'<b>Ahora son dos ubicaciones de apagadores.</b> Confirmar la alimentación para que el LED del arco se controle desde la caja del lado del inodoro.'}
+];
+
+var BENEFITS = [
+ {en:'The '+d('48"')+' niche width is exactly one '+d('2×4')+' tile run — the back face is seamless, no vertical joints.',
+  es:'El nicho de '+d('48"')+' es exactamente una corrida de loseta '+d('2×4')+' — el fondo queda sin costuras verticales.'},
+ {en:'A full tile at top-right on the vanity wall gives a clean edge where the wall meets the shower glass, and hides every cut in the corner and along the floor.',
+  es:'La loseta completa arriba a la derecha da un borde limpio donde la pared encuentra el vidrio, y esconde todos los cortes en la esquina y el piso.'},
+ {en:'Plumbing is already in the wall, not the floor — the floating vanity works with no re-run from the slab. Big win.',
+  es:'La plomería ya está en la pared, no en el piso — el mueble flotante funciona sin rehacer el drenaje. Gran ventaja.'},
+ {en:'The trimless plaster-in channel leaves no visible hardware, and it reuses wiring that is already run.',
+  es:'El canal empotrado sin marco no deja herrajes visibles, y aprovecha cableado ya instalado.'},
+ {en:'The arch reveal does double duty — accent light and shelf storage in one detail.',
+  es:'El arco sirve doble: luz de acento y repisa en un solo detalle.'},
+ {en:'A straight vertical stack on both walls lets the grout lines carry level from the shower through to the vanity wall.',
+  es:'La alineación vertical en ambas paredes deja que las juntas corran niveladas de la regadera a la pared del lavabo.'}
+];
+
+var UI = {
+  en:{sub:"Updated scope — read before continuing",
+      byArea:"By Area", byTrade:"By Trade", notes:"Notes",
+      reset:"Reset", hide:"Hide done", of:"done",
+      lede:"Several decisions changed after demo. Check items off as you finish them — your checkmarks are saved on this phone only.",
+      openq:"Open — need an answer before you build",
+      consider:"Items to Consider", benefits:"Why It Is Built This Way",
+      cancel:"Cancelled", change:"Changed",
+      foot:"Questions before you build it — not after. Text the owner.",
+      print:"Print / Save as PDF",
+      cap:"<b>Reference sketch.</b> Top left is the vanity wall tile layout — F = full tile, C = cut tile.",
+      tap:"Tap to enlarge ↗",
+      allDone:"all done",
+      nothing:"Nothing here yet.",
+      missing:'<b>Sketch photo not uploaded yet.</b> Add the photo to the repo as <code>sketch.jpeg</code> (repo root, next to <code>index.html</code>) and it will show up here.'},
+  es:{sub:"Alcance actualizado — leer antes de seguir",
+      byArea:"Por Área", byTrade:"Por Oficio", notes:"Notas",
+      reset:"Borrar", hide:"Ocultar hechos", of:"hechos",
+      lede:"Varias decisiones cambiaron después de la demolición. Marque cada punto al terminarlo — las marcas se guardan solo en este teléfono.",
+      openq:"Pendiente — se necesita respuesta antes de construir",
+      consider:"Puntos a Considerar", benefits:"Por Qué Se Hace Así",
+      cancel:"Cancelado", change:"Cambio",
+      foot:"Preguntas antes de construirlo — no después. Mande mensaje al dueño.",
+      print:"Imprimir / Guardar PDF",
+      cap:"<b>Croquis de referencia.</b> Arriba a la izquierda es el trazo del azulejo de la pared del lavabo — F = loseta completa, C = loseta cortada.",
+      tap:"Tocar para ampliar ↗",
+      allDone:"todo hecho",
+      nothing:"Nada aquí todavía.",
+      missing:'<b>Falta subir la foto del croquis.</b> Agregar la foto al repo como <code>sketch.jpeg</code> (en la raíz, junto a <code>index.html</code>) y aparecerá aquí.'}
+};
+
+/* ============ STATE ============ */
+var lang = localStorage.getItem("reno-lang") || "en";
+var view = localStorage.getItem("reno-view") || "area";
+var hideDone = localStorage.getItem("reno-hide") === "1";
+var done = {}, openSec = {};
+try{ done = JSON.parse(localStorage.getItem("reno-done") || "{}"); }catch(e){ done = {}; }
+try{ openSec = JSON.parse(localStorage.getItem("reno-open") || "{}"); }catch(e){ openSec = {}; }
+
+function save(){ localStorage.setItem("reno-done", JSON.stringify(done)); }
+function saveOpen(){ localStorage.setItem("reno-open", JSON.stringify(openSec)); }
+function byId(list,id){ for(var i=0;i<list.length;i++){ if(list[i].id===id) return list[i]; } return null; }
+function shortOf(o){ return o[lang==="en"?"short_en":"short_es"]; }
+
+/* ============ RENDER ============ */
+function itemHTML(it, badgeGroup){
+  var badge = it.flag ? '<span class="flag">'+UI[lang][it.flag]+'</span>' : "";
+  var who = "";
+  if(badgeGroup==="trade"){ who = '<span class="who">'+shortOf(byId(TRADES,it.t))+'</span>'; }
+  else if(badgeGroup==="area"){ who = '<span class="who">'+shortOf(byId(AREAS,it.a))+'</span>'; }
+  var isDone = done[it.id] ? 1 : 0;
+  return '<li'+(isDone?' class="isdone"':'')+'><label class="item">'+
+         '<input type="checkbox" data-id="'+it.id+'"'+(isDone?" checked":"")+'>'+
+         '<span class="txt">'+badge+who+it[lang]+'</span></label></li>';
+}
+
+function sectionHTML(secId, title, items, badgeGroup){
+  var n = 0;
+  for(var i=0;i<items.length;i++) if(done[items[i].id]) n++;
+  var all = (n === items.length && items.length > 0);
+  var isOpen = openSec[secId] !== 0;
+  var h = '<section id="sec-'+secId+'"><details'+(isOpen?" open":"")+' data-sec="'+secId+'">'+
+          '<summary><span><span class="caret">▶</span> '+title+'</span>'+
+          '<span class="meta'+(all?" alldone":"")+'">'+(all ? UI[lang].allDone : n+" / "+items.length)+'</span>'+
+          '</summary><ul class="items">';
+  for(var j=0;j<items.length;j++) h += itemHTML(items[j], badgeGroup);
+  return h + '</ul></details></section>';
+}
+
+function notesSectionHTML(secId, title, list){
+  var isOpen = openSec[secId] !== 0;
+  var h = '<section id="sec-'+secId+'"><details'+(isOpen?" open":"")+' data-sec="'+secId+'">'+
+          '<summary><span><span class="caret">▶</span> '+title+'</span>'+
+          '<span class="meta">'+list.length+'</span></summary><ol class="notes">';
+  for(var i=0;i<list.length;i++) h += '<li>'+list[i][lang]+'</li>';
+  return h + '</ol></details></section>';
+}
+
+function render(){
+  document.documentElement.lang = lang;
+  document.getElementById("sub").textContent = UI[lang].sub;
+  document.getElementById("lede").textContent = UI[lang].lede;
+  document.getElementById("reset").textContent = UI[lang].reset;
+  document.getElementById("hidedone").textContent = UI[lang].hide;
+  document.getElementById("hidedone").setAttribute("aria-pressed", hideDone);
+  document.getElementById("foot").textContent = UI[lang].foot;
+  document.getElementById("printbtn").textContent = UI[lang].print;
+  document.getElementById("shotcap").innerHTML = UI[lang].cap;
+  document.getElementById("shottap").textContent = UI[lang].tap;
+  document.getElementById("shotmissing").innerHTML = UI[lang].missing;
+  document.getElementById("l-en").setAttribute("aria-pressed", lang==="en");
+  document.getElementById("l-es").setAttribute("aria-pressed", lang==="es");
+  document.body.classList.toggle("hidedone", hideDone);
+
+  /* open questions box */
+  var oq = '<h3>' + UI[lang].openq + '</h3><ul>';
+  for(var q=0;q<CONSIDER.length;q++) if(CONSIDER[q].open) oq += '<li>'+CONSIDER[q][lang]+'</li>';
+  document.getElementById("open").innerHTML = oq + '</ul>';
+
+  /* tabs */
+  var tabs = [["area",UI[lang].byArea],["trade",UI[lang].byTrade],["notes",UI[lang].notes]];
+  var th = "";
+  for(var i=0;i<tabs.length;i++)
+    th += '<button data-view="'+tabs[i][0]+'" aria-pressed="'+(view===tabs[i][0])+'">'+tabs[i][1]+'</button>';
+  document.getElementById("tabs").innerHTML = th;
+
+  /* panel + jump chips */
+  var h = "", chips = "";
+  if(view==="area"){
+    for(var a=0;a<AREAS.length;a++){
+      var grp = ITEMS.filter(function(x){return x.a===AREAS[a].id;});
+      if(!grp.length) continue;
+      h += sectionHTML(AREAS[a].id, AREAS[a][lang], grp, "trade");
+      chips += chipHTML(AREAS[a].id, shortOf(AREAS[a]), grp);
+    }
+  } else if(view==="trade"){
+    for(var t=0;t<TRADES.length;t++){
+      var g2 = ITEMS.filter(function(x){return x.t===TRADES[t].id;});
+      if(!g2.length) continue;
+      h += sectionHTML(TRADES[t].id, TRADES[t][lang], g2, "area");
+      chips += chipHTML(TRADES[t].id, shortOf(TRADES[t]), g2);
+    }
+  } else {
+    h += notesSectionHTML("consider", UI[lang].consider, CONSIDER);
+    h += notesSectionHTML("benefits", UI[lang].benefits, BENEFITS);
+    chips  = '<a href="#sec-consider">'+UI[lang].consider+'</a>';
+    chips += '<a href="#sec-benefits">'+UI[lang].benefits+'</a>';
+  }
+  document.getElementById("panel").innerHTML = h;
+  document.getElementById("jump").innerHTML = chips;
+  progress();
+  measure();
+}
+
+function chipHTML(secId, label, grp){
+  var n = 0;
+  for(var i=0;i<grp.length;i++) if(done[grp[i].id]) n++;
+  return '<a href="#sec-'+secId+'">'+label+'<b>'+n+'/'+grp.length+'</b></a>';
+}
+
+function progress(){
+  var n = 0;
+  for(var i=0;i<ITEMS.length;i++) if(done[ITEMS[i].id]) n++;
+  document.getElementById("pcount").textContent = n+" / "+ITEMS.length+" "+UI[lang].of;
+  document.getElementById("pfill").style.width = (n/ITEMS.length*100)+"%";
+}
+
+/* keep sticky offsets correct as the header changes height */
+function measure(){
+  var hh = document.querySelector("header").getBoundingClientRect().height;
+  document.documentElement.style.setProperty("--hh", Math.round(hh)+"px");
+}
+
+/* ============ EVENTS ============ */
+document.getElementById("l-en").onclick = function(){ lang="en"; localStorage.setItem("reno-lang","en"); render(); };
+document.getElementById("l-es").onclick = function(){ lang="es"; localStorage.setItem("reno-lang","es"); render(); };
+
+document.getElementById("tabs").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-view]");
+  if(!b) return;
+  view = b.getAttribute("data-view");
+  localStorage.setItem("reno-view", view);
+  render();
+  window.scrollTo({top:0});
+});
+
+document.getElementById("panel").addEventListener("change", function(e){
+  var cb = e.target;
+  if(cb.type!=="checkbox") return;
+  var id = cb.getAttribute("data-id");
+  if(cb.checked) done[id]=1; else delete done[id];
+  cb.closest("li").classList.toggle("isdone", !!cb.checked);
+  save();
+  progress();
+  refreshCounts();
+});
+
+document.getElementById("panel").addEventListener("toggle", function(e){
+  var det = e.target;
+  if(det.tagName!=="DETAILS") return;
+  openSec[det.getAttribute("data-sec")] = det.open ? 1 : 0;
+  saveOpen();
+}, true);
+
+/* update per-section + chip counts without re-rendering (keeps scroll position) */
+function refreshCounts(){
+  var groups = (view==="area") ? AREAS : (view==="trade" ? TRADES : []);
+  for(var i=0;i<groups.length;i++){
+    var g = groups[i];
+    var grp = ITEMS.filter(function(x){ return view==="area" ? x.a===g.id : x.t===g.id; });
+    if(!grp.length) continue;
+    var n = 0;
+    for(var j=0;j<grp.length;j++) if(done[grp[j].id]) n++;
+    var all = n===grp.length;
+    var sec = document.getElementById("sec-"+g.id);
+    if(sec){
+      var meta = sec.querySelector(".meta");
+      meta.textContent = all ? UI[lang].allDone : n+" / "+grp.length;
+      meta.classList.toggle("alldone", all);
+    }
+    var chip = document.querySelector('#jump a[href="#sec-'+g.id+'"] b');
+    if(chip) chip.textContent = n+"/"+grp.length;
+  }
+}
+
+document.getElementById("reset").onclick = function(){
+  done = {}; save(); render();
+};
+
+document.getElementById("hidedone").onclick = function(){
+  hideDone = !hideDone;
+  localStorage.setItem("reno-hide", hideDone ? "1" : "0");
+  document.body.classList.toggle("hidedone", hideDone);
+  this.setAttribute("aria-pressed", hideDone);
+};
+
+/* graceful state if the photo has not been uploaded yet */
+document.getElementById("shotimg").addEventListener("error", function(){
+  document.getElementById("shot").classList.add("noimg");
+  measure();
+});
+
+window.addEventListener("resize", measure);
+window.addEventListener("orientationchange", measure);
+
+/* collapse the title row + progress strip while scrolling, so the sticky
+   header stays small on a phone. Hysteresis keeps it from flapping. */
+var hdr = document.querySelector("header"), tight = false;
+window.addEventListener("scroll", function(){
+  var y = window.scrollY;
+  if(!tight && y > 130){ tight = true; hdr.classList.add("tight"); measure(); }
+  else if(tight && y < 70){ tight = false; hdr.classList.remove("tight"); measure(); }
+}, {passive:true});
+
+render();
+</script>
+</body>
+</html>
