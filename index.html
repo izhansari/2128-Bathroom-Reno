@@ -330,7 +330,7 @@ function d(s){return '<span class="dim">'+s+'</span>';}
 var AREA_IMAGES = {
   shower: ["shower1.jpeg"],
   vanity: ["vanity1.jpeg","vanity2.jpeg"],
-  toilet: ["toilet1.jpeg"]
+  toilet: ["toilet1.jpeg","toilet2.jpeg"]
 };
 
 /* Plain-language "what this area should end up as" — the goal, so a worker can
@@ -343,8 +343,8 @@ var AREA_DESC = {
     en:'A 48" floating vanity pushed hard left, counter at 36", mirror centered on the cabinet, and a hidden LED glow along the top of the wall — no sconces. Marble-look tile with the full tile at top right so every cut hides in the corner and along the floor. The ~18" on the right stays open.',
     es:'Un mueble flotante de 48" pegado a la izquierda, cubierta a 36", espejo centrado con el mueble y una luz LED oculta en el borde superior de la pared — sin sconces. Azulejo tipo mármol con la loseta completa arriba a la derecha para esconder los cortes en la esquina y el piso. Los ~18" de la derecha quedan libres.'},
   toilet:{
-    en:'The toilet tucked under a drywall arch with a shelf, a hidden LED tracing the curve, and a bidet that gets both water and power. The arch and niche lights are switched from the box by the door.',
-    es:'El inodoro debajo de un arco de drywall con repisa, un LED oculto que sigue la curva, y un bidé con agua y electricidad. Las luces del arco y del nicho se controlan desde la caja junto a la puerta.'},
+    en:'The toilet sits inside a tall drywall arch. The opening is 32" wide — a 3.5" arch leg and a 4" gap on each side of the 17" toilet — and the arch wall projects 7.5" off the back to cover the tank, with the top of the arch stopping 7" below the ceiling. A hidden LED washes the whole back wall behind the arch. The bidet gets both water and power, and the lights are switched from the box by the door.',
+    es:'El inodoro va dentro de un arco alto de drywall. La abertura es de 32" de ancho — 3.5" de arco y 4" de espacio a cada lado del inodoro de 17" — y la pared del arco sobresale 7.5" de atrás para cubrir el tanque, y la punta del arco termina 7" abajo del techo. Un LED oculto ilumina toda la pared de atrás detrás del arco. El bidé tiene agua y electricidad, y las luces se controlan desde la caja junto a la puerta.'},
   all:{
     en:'Details that tie the whole room together: every LED is 3000K on a dimmer, and no tile gets set until the grout colors are picked.',
     es:'Detalles que unifican todo el baño: cada LED es de 3000K con dimmer, y no se pega ningún azulejo hasta elegir el color de la lechada.'}
@@ -430,11 +430,11 @@ var ITEMS = [
 
 /* ---- TOILET ---- */
 {id:"t1", a:"toilet", t:"framing", flag:"change",
- en:'<b>Frame + drywall the ARCH</b> at the front of the nook (~'+d('32"W × 40"D')+'). Depth '+d('4"–5"')+' — <b>final number TBD</b> — deep enough for a shelf ledge. Toilet sits partly under it.',
- es:'<b>Enmarcar y hacer el ARCO en drywall</b> al frente del espacio (~'+d('32" × 40"')+'). Fondo '+d('4"–5"')+' — <b>número final pendiente</b> — con repisa. El inodoro queda parcialmente debajo.'},
+ en:'<b>Frame + drywall the ARCH.</b> Opening '+d('32"')+' wide — '+d('3.5"')+' arch leg + '+d('4"')+' gap on each side of the '+d('17"')+' toilet. The arch wall projects '+d('7.5"')+' off the back wall (covers the tank). Top of the arch stops '+d('7"')+' below the ceiling.',
+ es:'<b>Enmarcar y hacer el ARCO en drywall.</b> Abertura de '+d('32"')+' de ancho — '+d('3.5"')+' de arco + '+d('4"')+' de espacio a cada lado del inodoro de '+d('17"')+'. La pared del arco sobresale '+d('7.5"')+' de la pared de atrás (cubre el tanque). La punta del arco termina '+d('7"')+' abajo del techo.'},
 {id:"t2", a:"toilet", t:"framing",
- en:'Recess for the LED channel that outlines the arch.',
- es:'Espacio para el canal LED que rodea el arco.'},
+ en:'Leave the recess for the <b>LED strip on the back wall</b>, hidden behind the arch face.',
+ es:'Dejar el espacio para la <b>tira LED en la pared de atrás</b>, escondida detrás de la cara del arco.'},
 {id:"t4", a:"toilet", t:"plumbing",
  en:'<b>Water tap-off for the bidet</b> at the toilet.',
  es:'<b>Toma de agua para el bidé</b> en el inodoro.'},
@@ -445,8 +445,8 @@ var ITEMS = [
  en:'<b>Cancel the single accent bulb</b> in the arch.',
  es:'<b>Cancelar el foco de acento</b> del arco.'},
 {id:"t6", a:"toilet", t:"electrical", flag:"change",
- en:'<b>Hidden LED channel outlining the whole arch.</b> Trimless plaster-in channel; the curve needs a <b>flexible channel + flexible strip</b>.',
- es:'<b>Canal LED oculto que rodea todo el arco.</b> Canal empotrado sin marco (se resana); la curva necesita <b>canal y tira flexible</b>.'},
+ en:'<b>Hidden LED washing the whole BACK WALL of the arch</b> — mounted behind the arch face, running up both sides and around the curved top. Trimless, no visible hardware; the curve needs a <b>flexible strip</b>.',
+ es:'<b>LED oculto que ilumina toda la PARED DE ATRÁS del arco</b> — montado detrás de la cara del arco, subiendo por los dos lados y siguiendo la curva de arriba. Sin marco ni herrajes visibles; la curva necesita <b>tira flexible</b>.'},
 {id:"t7", a:"toilet", t:"electrical",
  en:'<b>2-gang</b> in the existing box on the wall left of the toilet, right of the additional door: <b>1)</b> arch LED &nbsp;<b>2)</b> niche LED.',
  es:'<b>2 apagadores</b> en la caja existente en la pared a la izquierda del inodoro, a la derecha de la puerta adicional: <b>1)</b> LED del arco &nbsp;<b>2)</b> LED del nicho.'},
@@ -471,9 +471,6 @@ var ITEMS = [
 
 /* open:true items also surface in the red "Open Questions" box at the top */
 var CONSIDER = [
- {open:true,
-  en:'<b>Final arch depth is still needed</b> — '+d('4"')+', '+d('5"')+', or match the toilet tank. The framer needs a number.',
-  es:'<b>Falta la profundidad final del arco</b> — '+d('4"')+', '+d('5"')+', o igual al tanque del inodoro. El carpintero necesita el número.'},
  {open:true,
   en:'<b>Grout colors</b> — pick one per tile type (niche marble, subway, fluted floor, vanity marble) before anyone sets.',
   es:'<b>Color de lechada</b> — elegir uno por cada tipo de loseta antes de que alguien empiece a pegar.'},
