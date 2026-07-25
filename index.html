@@ -126,6 +126,26 @@
   .shot.noimg #shotlink,.shot.noimg .tap{display:none}
   .shot.noimg .missing{display:block}
 
+  /* ---------- per-area photos ---------- */
+  .ashots{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:4px 0 16px}
+  .areashot{
+    position:relative;min-height:120px;margin:0;overflow:hidden;
+    border:1px solid var(--rule);border-radius:4px;background:var(--card);
+  }
+  /* labelled placeholder fills the slot until the photo loads */
+  .ashot-ph{
+    position:absolute;inset:0;z-index:0;
+    display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;text-align:center;
+    padding:16px;font-size:13px;color:var(--muted);line-height:1.5;
+    background:repeating-linear-gradient(-45deg,var(--chip) 0 10px,transparent 10px 20px);
+  }
+  .ashot-ph code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.94em;
+    background:var(--card);color:var(--ink);padding:2px 6px;border-radius:3px;border:1px solid var(--rule)}
+  .areashot .ashot-link{display:block;line-height:0;position:relative;z-index:1}
+  .areashot img{width:100%;height:auto;display:block}
+  .areashot.ok .ashot-ph{display:none}          /* photo loaded — drop placeholder */
+  .areashot.noimg .ashot-link{display:none}      /* load failed — no broken icon */
+
   /* ---------- open questions ---------- */
   .open{
     margin:16px 0 0;border:2px solid var(--flag);border-radius:4px;background:var(--card);
@@ -215,6 +235,7 @@
     label.item input{display:none}
     .txt{text-decoration:none!important;color:#000!important}
     .shot{border:1px solid #999}
+    .areashot:not(.ok){display:none}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
@@ -283,6 +304,14 @@ var TRADES = [
 ];
 
 function d(s){return '<span class="dim">'+s+'</span>';}
+
+/* Reference photos per area. Drop these files in the repo root and they show up
+   automatically; until then each slot shows a labelled placeholder. */
+var AREA_IMAGES = {
+  shower: ["shower1.jpeg"],
+  vanity: ["vanity1.jpeg","vanity2.jpeg"],
+  toilet: ["toilet1.jpeg"]
+};
 
 /* flag: "cancel" | "change" | null */
 var ITEMS = [
@@ -458,6 +487,7 @@ var UI = {
       print:"Print / Save as PDF",
       cap:"<b>Reference sketch.</b> Top left is the vanity wall tile layout — F = full tile, C = cut tile.",
       tap:"Tap to enlarge ↗",
+      photoAdd:"Photo —",
       allDone:"all done",
       nothing:"Nothing here yet.",
       missing:'<b>Sketch photo not uploaded yet.</b> Drop the photo in the repo root next to <code>index.html</code>, named <code>sketch.jpg</code> (or <code>.jpeg</code> / <code>.png</code>) — it will show up here automatically.'},
@@ -472,6 +502,7 @@ var UI = {
       print:"Imprimir / Guardar PDF",
       cap:"<b>Croquis de referencia.</b> Arriba a la izquierda es el trazo del azulejo de la pared del lavabo — F = loseta completa, C = loseta cortada.",
       tap:"Tocar para ampliar ↗",
+      photoAdd:"Foto —",
       allDone:"todo hecho",
       nothing:"Nada aquí todavía.",
       missing:'<b>Falta subir la foto del croquis.</b> Poner la foto en la raíz del repo, junto a <code>index.html</code>, con el nombre <code>sketch.jpg</code> (o <code>.jpeg</code> / <code>.png</code>) — aparecerá aquí automáticamente.'}
@@ -502,7 +533,23 @@ function itemHTML(it, badgeGroup){
          '<span class="txt">'+badge+who+it[lang]+'</span></label></li>';
 }
 
-function sectionHTML(secId, title, items, badgeGroup){
+function areaShotsHTML(areaId){
+  var imgs = AREA_IMAGES[areaId];
+  if(!imgs || !imgs.length) return "";
+  var h = '<div class="ashots">';
+  for(var i=0;i<imgs.length;i++){
+    var f = imgs[i];
+    h += '<figure class="areashot">'+
+           '<a class="ashot-link" href="'+f+'" target="_blank" rel="noopener">'+
+             '<img src="'+f+'" alt="Reference photo '+f+'" loading="lazy">'+
+           '</a>'+
+           '<span class="ashot-ph"><b>'+UI[lang].photoAdd+'</b> <code>'+f+'</code></span>'+
+         '</figure>';
+  }
+  return h + '</div>';
+}
+
+function sectionHTML(secId, title, items, badgeGroup, topHTML){
   var n = 0;
   for(var i=0;i<items.length;i++) if(done[items[i].id]) n++;
   var all = (n === items.length && items.length > 0);
@@ -510,7 +557,7 @@ function sectionHTML(secId, title, items, badgeGroup){
   var h = '<section id="sec-'+secId+'"><details'+(isOpen?" open":"")+' data-sec="'+secId+'">'+
           '<summary><span><span class="caret">▶</span> '+title+'</span>'+
           '<span class="meta'+(all?" alldone":"")+'">'+(all ? UI[lang].allDone : n+" / "+items.length)+'</span>'+
-          '</summary><ul class="items">';
+          '</summary>'+(topHTML||"")+'<ul class="items">';
   for(var j=0;j<items.length;j++) h += itemHTML(items[j], badgeGroup);
   return h + '</ul></details></section>';
 }
@@ -558,7 +605,7 @@ function render(){
     for(var a=0;a<AREAS.length;a++){
       var grp = ITEMS.filter(function(x){return x.a===AREAS[a].id;});
       if(!grp.length) continue;
-      h += sectionHTML(AREAS[a].id, AREAS[a][lang], grp, "trade");
+      h += sectionHTML(AREAS[a].id, AREAS[a][lang], grp, "trade", areaShotsHTML(AREAS[a].id));
       chips += chipHTML(AREAS[a].id, shortOf(AREAS[a]), grp);
     }
   } else if(view==="trade"){
@@ -628,6 +675,18 @@ document.getElementById("panel").addEventListener("toggle", function(e){
   if(det.tagName!=="DETAILS") return;
   openSec[det.getAttribute("data-sec")] = det.open ? 1 : 0;
   saveOpen();
+}, true);
+
+/* Reveal an area photo once it actually loads; on failure keep the labelled
+   placeholder and hide the broken image. Capture phase because load/error do
+   not bubble, and the panel is re-rendered on every language / tab change. */
+document.getElementById("panel").addEventListener("load", function(e){
+  var fig = e.target.closest && e.target.closest(".areashot");
+  if(fig){ fig.classList.add("ok"); fig.classList.remove("noimg"); }
+}, true);
+document.getElementById("panel").addEventListener("error", function(e){
+  var fig = e.target.closest && e.target.closest(".areashot");
+  if(fig){ fig.classList.add("noimg"); }
 }, true);
 
 /* update per-section + chip counts without re-rendering (keeps scroll position) */

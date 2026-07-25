@@ -35,6 +35,32 @@ broken image — everything else on the page still works.
 To use a different filename entirely, edit the `SHOT_NAMES` array near the bottom
 of the `<script>` block in `index.html`.
 
+## Per-area photos
+
+Each area section in the **By Area** view has photo slots at the top. Drop these
+files in the repo root and they appear automatically; until then each slot shows a
+labelled placeholder (`Photo — vanity1.jpeg`).
+
+| Area    | Files |
+|---------|-------|
+| Shower  | `shower1.jpeg` |
+| Vanity  | `vanity1.jpeg`, `vanity2.jpeg` |
+| Toilet  | `toilet1.jpeg` |
+
+To add, remove, or rename slots, edit the `AREA_IMAGES` map near the top of the
+`<script>` block in `index.html`:
+
+```js
+var AREA_IMAGES = {
+  shower: ["shower1.jpeg"],
+  vanity: ["vanity1.jpeg","vanity2.jpeg"],
+  toilet: ["toilet1.jpeg"]
+};
+```
+
+These names are exact (unlike the top sketch, which tries several extensions), so
+match the filename to what is listed here. Empty slots are hidden when printing.
+
 ## Deploying on Vercel
 
 1. Go to [vercel.com/new](https://vercel.com/new) and import this repo.
