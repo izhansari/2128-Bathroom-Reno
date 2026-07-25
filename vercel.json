@@ -9,7 +9,7 @@
       ]
     },
     {
-      "source": "/sketch.jpeg",
+      "source": "/sketch.:ext",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=3600" }
       ]

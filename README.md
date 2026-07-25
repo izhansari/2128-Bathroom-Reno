@@ -10,19 +10,30 @@ with tap-to-check boxes so each trade can work their own list.
 
 ## Adding the sketch photo
 
-The page expects the photo at the repo root, named exactly **`sketch.jpeg`**.
+Put the photo in the **repo root**, next to `index.html`, named `sketch` with any
+common image extension:
 
 ```
-git add sketch.jpeg
+sketch.jpg    sketch.jpeg    sketch.png    sketch.webp
+```
+
+The page tries each in turn and uses the first one that loads, so it does not
+matter which format your phone exported.
+
+```
+git add sketch.jpg
 git commit -m "Add reference sketch photo"
 git push
 ```
 
+Or upload it straight through the GitHub web UI: **Add file → Upload files**,
+drag it in, commit.
+
 Until that file exists the page shows a short note in the photo slot instead of a
 broken image — everything else on the page still works.
 
-If your file is a `.jpg` or `.png`, either rename it to `sketch.jpeg` or change the
-two `src`/`href` references in `index.html` to match.
+To use a different filename entirely, edit the `SHOT_NAMES` array near the bottom
+of the `<script>` block in `index.html`.
 
 ## Deploying on Vercel
 

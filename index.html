@@ -460,7 +460,7 @@ var UI = {
       tap:"Tap to enlarge ↗",
       allDone:"all done",
       nothing:"Nothing here yet.",
-      missing:'<b>Sketch photo not uploaded yet.</b> Add the photo to the repo as <code>sketch.jpeg</code> (repo root, next to <code>index.html</code>) and it will show up here.'},
+      missing:'<b>Sketch photo not uploaded yet.</b> Drop the photo in the repo root next to <code>index.html</code>, named <code>sketch.jpg</code> (or <code>.jpeg</code> / <code>.png</code>) — it will show up here automatically.'},
   es:{sub:"Alcance actualizado — leer antes de seguir",
       byArea:"Por Área", byTrade:"Por Oficio", notes:"Notas",
       reset:"Borrar", hide:"Ocultar hechos", of:"hechos",
@@ -474,7 +474,7 @@ var UI = {
       tap:"Tocar para ampliar ↗",
       allDone:"todo hecho",
       nothing:"Nada aquí todavía.",
-      missing:'<b>Falta subir la foto del croquis.</b> Agregar la foto al repo como <code>sketch.jpeg</code> (en la raíz, junto a <code>index.html</code>) y aparecerá aquí.'}
+      missing:'<b>Falta subir la foto del croquis.</b> Poner la foto en la raíz del repo, junto a <code>index.html</code>, con el nombre <code>sketch.jpg</code> (o <code>.jpeg</code> / <code>.png</code>) — aparecerá aquí automáticamente.'}
 };
 
 /* ============ STATE ============ */
@@ -662,9 +662,27 @@ document.getElementById("hidedone").onclick = function(){
   this.setAttribute("aria-pressed", hideDone);
 };
 
-/* graceful state if the photo has not been uploaded yet */
-document.getElementById("shotimg").addEventListener("error", function(){
-  document.getElementById("shot").classList.add("noimg");
+/* The photo can be named any of these — first one that loads wins, so it does
+   not matter whether the phone exported .jpg, .jpeg or .png. */
+var SHOT_NAMES = ["sketch.jpeg","sketch.jpg","sketch.png","sketch.webp","sketch.JPG","sketch.JPEG","sketch.PNG"];
+var shotN = 0;
+var shotImg = document.getElementById("shotimg");
+var shotLink = document.getElementById("shotlink");
+var shotTap = document.getElementById("shottap");
+
+shotImg.addEventListener("error", function(){
+  shotN++;
+  if(shotN < SHOT_NAMES.length){
+    shotImg.src = SHOT_NAMES[shotN];
+  } else {
+    document.getElementById("shot").classList.add("noimg");
+    measure();
+  }
+});
+shotImg.addEventListener("load", function(){
+  document.getElementById("shot").classList.remove("noimg");
+  shotLink.href = shotImg.getAttribute("src");
+  shotTap.href = shotImg.getAttribute("src");
   measure();
 });
 
