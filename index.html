@@ -62,16 +62,15 @@
     padding-top:env(safe-area-inset-top);
   }
   .bar{max-width:820px;margin:0 auto;padding:8px 16px 0}
-  .titlerow{display:flex;align-items:center;justify-content:space-between;gap:10px;overflow:hidden}
+  .titlerow{display:flex;align-items:center;justify-content:space-between;gap:8px;overflow:hidden}
   /* reclaim screen height once the user starts scrolling */
   header.tight .titlerow{height:0;margin:0;opacity:0;pointer-events:none}
-  header.tight .prog{display:none}
   h1{font-size:17px;margin:0;letter-spacing:-.01em;font-weight:800;line-height:1.2}
   h1 span{display:block;font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-top:3px}
   .lang{display:flex;border:2px solid var(--ink);border-radius:3px;overflow:hidden;flex:0 0 auto}
   .lang button{
-    font:inherit;font-size:13px;font-weight:800;letter-spacing:.06em;
-    background:transparent;color:var(--ink);border:0;padding:0 12px;cursor:pointer;min-height:38px;
+    font:inherit;font-size:12.5px;font-weight:800;letter-spacing:.01em;
+    background:transparent;color:var(--ink);border:0;padding:0 10px;cursor:pointer;min-height:38px;white-space:nowrap;
   }
   .lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
 
@@ -93,21 +92,7 @@
     background:var(--chip);border:1px solid var(--rule);border-radius:99px;
     padding:7px 12px;white-space:nowrap;letter-spacing:.02em;
   }
-  .jump a b{color:var(--muted);font-weight:700;margin-left:5px}
 
-  /* progress strip */
-  .prog{
-    display:flex;align-items:center;gap:10px;
-    font-size:12.5px;color:var(--muted);padding:0 0 8px;
-  }
-  .prog .track{flex:1;height:6px;background:var(--chip);border-radius:99px;overflow:hidden}
-  .prog .fill{height:100%;width:0;background:var(--done);transition:width .2s}
-  .prog #pcount{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink);white-space:nowrap}
-  .prog button{
-    font:inherit;font-size:12px;font-weight:700;background:var(--chip);border:1px solid var(--rule);
-    color:var(--muted);border-radius:99px;cursor:pointer;padding:6px 10px;white-space:nowrap;min-height:34px;
-  }
-  .prog button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
   /* ---------- sketch photo ---------- */
   .shot{margin:16px 0 0;border:1px solid var(--rule);border-radius:4px;background:var(--card);overflow:hidden}
@@ -234,8 +219,6 @@
     font-size:.9em;font-weight:700;
     background:var(--chip);padding:1px 5px;border-radius:3px;white-space:nowrap;
   }
-  body.hidedone label.item input:checked{opacity:.5}
-  body.hidedone ul.items li.isdone{display:none}
   .empty{padding:16px 2px;font-size:14px;color:var(--muted);font-style:italic}
 
   /* ---------- notes ---------- */
@@ -251,7 +234,7 @@
   }
 
   @media print{
-    header,.jump,.prog,.noprint,footer .btn{display:none!important}
+    header,.jump,.noprint,footer .btn{display:none!important}
     body{font-size:10.5pt;background:#fff;color:#000}
     .wrap{max-width:none;padding:0}
     details{display:block!important}
@@ -272,18 +255,12 @@
     <div class="titlerow">
       <h1 id="ttl">2128 Bathroom Reno<span id="sub">Bathroom Plan</span></h1>
       <div class="lang" role="group" aria-label="Language / Idioma">
-        <button id="l-en" aria-pressed="true">EN</button>
-        <button id="l-es" aria-pressed="false">ES</button>
+        <button id="l-en" aria-pressed="true">English</button>
+        <button id="l-es" aria-pressed="false">Español</button>
       </div>
     </div>
     <nav class="tabs" id="tabs"></nav>
     <div class="jump" id="jump"></div>
-    <div class="prog">
-      <span id="pcount">0 / 0</span>
-      <span class="track"><span class="fill" id="pfill"></span></span>
-      <button id="hidedone" aria-pressed="false"></button>
-      <button id="reset"></button>
-    </div>
   </div>
 </header>
 
@@ -511,7 +488,6 @@ var BENEFITS = [
 var UI = {
   en:{sub:"Bathroom Plan",
       byArea:"By Area", byTrade:"By Trade", notes:"Notes",
-      reset:"Reset", hide:"Hide done", of:"done",
       lede:"Several decisions changed after demo. Check items off as you finish them — your checkmarks are saved on this phone only.",
       openq:"Open — need an answer before you build",
       consider:"Items to Consider", benefits:"Why It Is Built This Way",
@@ -526,7 +502,6 @@ var UI = {
       missing:'<b>Sketch photo not uploaded yet.</b> Drop the photo in the repo root next to <code>index.html</code>, named <code>sketch.jpg</code> (or <code>.jpeg</code> / <code>.png</code>) — it will show up here automatically.'},
   es:{sub:"Plan del Baño",
       byArea:"Por Área", byTrade:"Por Oficio", notes:"Notas",
-      reset:"Borrar", hide:"Ocultar hechos", of:"hechos",
       lede:"Varias decisiones cambiaron después de la demolición. Marque cada punto al terminarlo — las marcas se guardan solo en este teléfono.",
       openq:"Pendiente — se necesita respuesta antes de construir",
       consider:"Puntos a Considerar", benefits:"Por Qué Se Hace Así",
@@ -544,7 +519,6 @@ var UI = {
 /* ============ STATE ============ */
 var lang = localStorage.getItem("reno-lang") || "en";
 var view = localStorage.getItem("reno-view") || "area";
-var hideDone = localStorage.getItem("reno-hide") === "1";
 var done = {}, openSec = {};
 try{ done = JSON.parse(localStorage.getItem("reno-done") || "{}"); }catch(e){ done = {}; }
 try{ openSec = JSON.parse(localStorage.getItem("reno-open") || "{}"); }catch(e){ openSec = {}; }
@@ -561,7 +535,7 @@ function itemHTML(it, badgeGroup){
   if(badgeGroup==="trade"){ who = '<span class="who who-'+it.t+'">'+shortOf(byId(TRADES,it.t))+'</span>'; }
   else if(badgeGroup==="area"){ who = '<span class="who who-'+it.a+'">'+shortOf(byId(AREAS,it.a))+'</span>'; }
   var isDone = done[it.id] ? 1 : 0;
-  return '<li'+(isDone?' class="isdone"':'')+'><label class="item">'+
+  return '<li><label class="item">'+
          '<input type="checkbox" data-id="'+it.id+'"'+(isDone?" checked":"")+'>'+
          '<span class="txt">'+badge+who+it[lang]+'</span></label></li>';
 }
@@ -614,9 +588,6 @@ function render(){
   document.documentElement.lang = lang;
   document.getElementById("sub").textContent = UI[lang].sub;
   document.getElementById("lede").textContent = UI[lang].lede;
-  document.getElementById("reset").textContent = UI[lang].reset;
-  document.getElementById("hidedone").textContent = UI[lang].hide;
-  document.getElementById("hidedone").setAttribute("aria-pressed", hideDone);
   document.getElementById("foot").textContent = UI[lang].foot;
   document.getElementById("printbtn").textContent = UI[lang].print;
   document.getElementById("shotcap").innerHTML = UI[lang].cap;
@@ -624,7 +595,6 @@ function render(){
   document.getElementById("shotmissing").innerHTML = UI[lang].missing;
   document.getElementById("l-en").setAttribute("aria-pressed", lang==="en");
   document.getElementById("l-es").setAttribute("aria-pressed", lang==="es");
-  document.body.classList.toggle("hidedone", hideDone);
 
   /* open questions box */
   var oq = '<h3>' + UI[lang].openq + '</h3><ul>';
@@ -645,14 +615,14 @@ function render(){
       var grp = ITEMS.filter(function(x){return x.a===AREAS[a].id;});
       if(!grp.length) continue;
       h += sectionHTML(AREAS[a].id, AREAS[a][lang], grp, "trade", areaDescHTML(AREAS[a].id)+areaShotsHTML(AREAS[a].id));
-      chips += chipHTML(AREAS[a].id, shortOf(AREAS[a]), grp);
+      chips += chipHTML(AREAS[a].id, shortOf(AREAS[a]));
     }
   } else if(view==="trade"){
     for(var t=0;t<TRADES.length;t++){
       var g2 = ITEMS.filter(function(x){return x.t===TRADES[t].id;});
       if(!g2.length) continue;
       h += sectionHTML(TRADES[t].id, TRADES[t][lang], g2, "area");
-      chips += chipHTML(TRADES[t].id, shortOf(TRADES[t]), g2);
+      chips += chipHTML(TRADES[t].id, shortOf(TRADES[t]));
     }
   } else {
     h += notesSectionHTML("consider", UI[lang].consider, CONSIDER);
@@ -662,21 +632,11 @@ function render(){
   }
   document.getElementById("panel").innerHTML = h;
   document.getElementById("jump").innerHTML = chips;
-  progress();
   measure();
 }
 
-function chipHTML(secId, label, grp){
-  var n = 0;
-  for(var i=0;i<grp.length;i++) if(done[grp[i].id]) n++;
-  return '<a href="#sec-'+secId+'">'+label+'<b>'+n+'/'+grp.length+'</b></a>';
-}
-
-function progress(){
-  var n = 0;
-  for(var i=0;i<ITEMS.length;i++) if(done[ITEMS[i].id]) n++;
-  document.getElementById("pcount").textContent = n+" / "+ITEMS.length+" "+UI[lang].of;
-  document.getElementById("pfill").style.width = (n/ITEMS.length*100)+"%";
+function chipHTML(secId, label){
+  return '<a href="#sec-'+secId+'">'+label+'</a>';
 }
 
 /* keep sticky offsets correct as the header changes height */
@@ -703,9 +663,7 @@ document.getElementById("panel").addEventListener("change", function(e){
   if(cb.type!=="checkbox") return;
   var id = cb.getAttribute("data-id");
   if(cb.checked) done[id]=1; else delete done[id];
-  cb.closest("li").classList.toggle("isdone", !!cb.checked);
   save();
-  progress();
   refreshCounts();
 });
 
@@ -728,7 +686,7 @@ document.getElementById("panel").addEventListener("error", function(e){
   if(fig){ fig.classList.add("noimg"); }
 }, true);
 
-/* update per-section + chip counts without re-rendering (keeps scroll position) */
+/* update per-section done counts without re-rendering (keeps scroll position) */
 function refreshCounts(){
   var groups = (view==="area") ? AREAS : (view==="trade" ? TRADES : []);
   for(var i=0;i<groups.length;i++){
@@ -744,21 +702,8 @@ function refreshCounts(){
       meta.textContent = all ? UI[lang].allDone : n+" / "+grp.length;
       meta.classList.toggle("alldone", all);
     }
-    var chip = document.querySelector('#jump a[href="#sec-'+g.id+'"] b');
-    if(chip) chip.textContent = n+"/"+grp.length;
   }
 }
-
-document.getElementById("reset").onclick = function(){
-  done = {}; save(); render();
-};
-
-document.getElementById("hidedone").onclick = function(){
-  hideDone = !hideDone;
-  localStorage.setItem("reno-hide", hideDone ? "1" : "0");
-  document.body.classList.toggle("hidedone", hideDone);
-  this.setAttribute("aria-pressed", hideDone);
-};
 
 /* The photo can be named any of these — first one that loads wins, so it does
    not matter whether the phone exported .jpg, .jpeg or .png. */

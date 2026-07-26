@@ -82,8 +82,8 @@ with the GC and the trades.
 - **Checkboxes** save to the browser's `localStorage`. They are per-device and
   per-browser — they are a personal punch list, not shared state. Nobody sees
   anyone else's checkmarks.
-- **Cancelled / Changed** badges mark everything that moved after demo.
-- **Hide done** collapses finished items; **Reset** clears all checkmarks.
+- **Cancelled / Changed** badges (outlined red / gold) mark everything that
+  moved after demo.
 - **Print / Save as PDF** prints a clean, fully expanded copy with the header
   chrome stripped out.
 
