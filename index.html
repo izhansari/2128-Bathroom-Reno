@@ -114,7 +114,9 @@
   .shot.noimg .missing{display:block}
 
   /* ---------- per-area photos ---------- */
-  .ashots{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:4px 0 16px}
+  /* align-items:start so a short caption does not inherit the row's height */
+  .ashots{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+          align-items:start;gap:10px;margin:4px 0 16px}
   .areashot{
     margin:0;overflow:hidden;
     border:1px solid var(--rule);border-radius:4px;background:var(--card);
@@ -135,7 +137,11 @@
   .ashot-ph code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.94em;
     background:var(--card);color:var(--ink);padding:2px 6px;border-radius:3px;border:1px solid var(--rule)}
   .areashot .ashot-link{display:block;line-height:0;position:relative;z-index:1}
-  .areashot img{width:100%;height:auto;display:block}
+  /* cap the height — these are thumbnails, tap opens the full-size file */
+  .areashot img{
+    width:100%;height:auto;display:block;
+    max-height:240px;object-fit:contain;background:var(--chip);
+  }
   .areashot.ok .ashot-ph{display:none}          /* photo loaded — drop placeholder */
   .areashot.noimg .ashot-link{display:none}      /* load failed — no broken icon */
 
@@ -268,6 +274,41 @@
     .txt{text-decoration:none!important;color:#000!important}
     .shot{border:1px solid #999}
     .areashot:not(.ok){display:none}
+  }
+  /* ---------- phones ----------
+     Most of the trades read this on a phone, so tighten type and turn the
+     photos into a 2-up thumbnail grid. Every image still opens full-size on
+     tap, so nothing is lost by shrinking it here. */
+  @media (max-width:480px){
+    body{font-size:15.5px;line-height:1.4}
+    .wrap{padding:0 13px 70px}
+
+    .ashots{grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:8px;margin:2px 0 12px}
+    /* fixed media height keeps the thumbnails in a row optically aligned */
+    .ashot-media{height:150px;min-height:0}
+    .areashot .ashot-link{height:100%}
+    .areashot img{height:100%;max-height:none}
+    .jump a{padding:9px 13px}
+    .ashot-cap{font-size:11px;line-height:1.35;padding:6px 8px}
+    .ashot-ph{font-size:11.5px;padding:12px}
+
+    label.item{gap:11px;padding:10px 2px}
+    label.item input{width:24px;height:24px}
+    label.item input:checked::after{left:7px;top:3px;width:5px;height:11px}
+    .who,.flag{font-size:10px;padding:2px 6px;margin-right:6px}
+    .flag{padding:0 5px}
+
+    .adesc{font-size:13.5px;line-height:1.45;padding:10px 11px;margin:2px 0 11px}
+    .tilespec{font-size:12.5px;line-height:1.5;padding:9px 11px;margin-bottom:11px}
+    .adocs{margin-bottom:11px}
+    .adocs a{font-size:12.5px;padding:9px 11px}
+
+    .open{padding:12px 13px 3px}
+    .open li{font-size:13.5px;margin-bottom:9px}
+    .lede{font-size:13.5px}
+    ol.notes li{margin-bottom:11px}
+    section{margin-top:22px}
+    .shot img{max-height:260px;object-fit:contain}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
