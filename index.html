@@ -310,6 +310,48 @@
     section{margin-top:22px}
     .shot img{max-height:260px;object-fit:contain}
   }
+  /* ---------- lightbox ----------
+     Images open here instead of a new tab, so nobody loses their place in
+     the list. Back button closes it (a history entry is pushed on open). */
+  dialog#lb{
+    padding:0;border:0;margin:0;max-width:100vw;max-height:100vh;
+    width:100vw;height:100vh;height:100dvh;
+    background:#0b0b0b;color:#fff;overflow:hidden;
+  }
+  dialog#lb::backdrop{background:rgba(0,0,0,.92)}
+  .lb-scroll{
+    position:absolute;inset:0;overflow:auto;-webkit-overflow-scrolling:touch;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .lb-scroll img{
+    display:block;max-width:100%;max-height:100vh;max-height:100dvh;
+    object-fit:contain;cursor:zoom-in;
+  }
+  /* zoomed: a fixed multiple of the screen, pan by scrolling. Natural pixel
+     size would be ~9x on a wide photo — far past useful. */
+  dialog#lb.zoom .lb-scroll{display:block}
+  dialog#lb.zoom .lb-scroll img{
+    max-width:none;max-height:none;width:280%;height:auto;cursor:zoom-out;
+  }
+  .lb-bar{
+    position:absolute;top:0;left:0;right:0;z-index:2;
+    display:flex;align-items:flex-start;gap:10px;padding:10px 12px;
+    background:linear-gradient(to bottom,rgba(0,0,0,.8),rgba(0,0,0,0));
+    pointer-events:none;          /* taps fall through to close; only × is live */
+  }
+  .lb-x{pointer-events:auto}
+  .lb-cap{flex:1;min-width:0;font-size:12.5px;line-height:1.4;color:#e8e4da;padding-top:12px}
+  .lb-x{
+    flex:0 0 auto;width:44px;height:44px;padding:0;border:0;border-radius:50%;
+    background:rgba(255,255,255,.16);color:#fff;font:inherit;font-size:24px;line-height:44px;
+    cursor:pointer;
+  }
+  .lb-hint{
+    position:absolute;left:0;right:0;bottom:14px;z-index:2;text-align:center;
+    font-size:12px;color:#d7d2c6;pointer-events:none;text-shadow:0 1px 4px #000;
+  }
+  dialog#lb.zoom .lb-hint{display:none}
+
   @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -353,6 +395,17 @@
     <button class="btn noprint" id="printbtn" onclick="window.print()"></button>
   </footer>
 </div>
+
+<dialog id="lb" class="noprint" aria-label="Image viewer">
+  <div class="lb-scroll" id="lbscroll">
+    <img id="lbimg" alt="">
+  </div>
+  <div class="lb-bar">
+    <span class="lb-cap" id="lbcap"></span>
+    <button class="lb-x" id="lbx" type="button">&times;</button>
+  </div>
+  <div class="lb-hint" id="lbhint"></div>
+</dialog>
 
 <script>
 /* ============ CONTENT ============ */
@@ -618,6 +671,7 @@ var UI = {
       cap:"<b>Reference sketch.</b> Top left is the vanity wall tile layout — F = full tile, C = cut tile.",
       tap:"Tap to enlarge ↗",
       photoAdd:"Photo —", tileLabel:"Tile & grout",
+      zoomHint:"Tap image to zoom · Back or × to close", close:"Close",
       allDone:"all done",
       nothing:"Nothing here yet.",
       missing:'<b>Sketch photo not uploaded yet.</b> Drop the photo in the repo root next to <code>index.html</code>, named <code>sketch.jpg</code> (or <code>.jpeg</code> / <code>.png</code>) — it will show up here automatically.'},
@@ -632,6 +686,7 @@ var UI = {
       cap:"<b>Croquis de referencia.</b> Arriba a la izquierda es el trazo del azulejo de la pared del lavabo — F = loseta completa, C = loseta cortada.",
       tap:"Tocar para ampliar ↗",
       photoAdd:"Foto —", tileLabel:"Azulejo y junta",
+      zoomHint:"Toque la imagen para acercar · Atrás o × para cerrar", close:"Cerrar",
       allDone:"todo hecho",
       nothing:"Nada aquí todavía.",
       missing:'<b>Falta subir la foto del croquis.</b> Poner la foto en la raíz del repo, junto a <code>index.html</code>, con el nombre <code>sketch.jpg</code> (o <code>.jpeg</code> / <code>.png</code>) — aparecerá aquí automáticamente.'}
@@ -869,6 +924,82 @@ shotImg.addEventListener("load", function(){
   shotTap.href = shotImg.getAttribute("src");
   measure();
 });
+
+/* ============ LIGHTBOX ============
+   Images open in an overlay on this page rather than a new tab, so nobody
+   loses their scroll position or their checkmarks. Opening pushes a history
+   entry, so the phone's Back button (and Escape) closes the viewer instead of
+   leaving the site. The <a href> is kept intact so long-press → "open in new
+   tab" still works and the page degrades gracefully without JS. */
+var lb = document.getElementById("lb"),
+    lbImg = document.getElementById("lbimg"),
+    lbCap = document.getElementById("lbcap"),
+    lbPushed = false;
+
+function lbOpen(src, cap){
+  if(!lb.showModal) return false;            /* very old browser — let the link work */
+  lbImg.src = src;
+  lbImg.alt = cap || "";
+  lbCap.textContent = cap || "";
+  lb.classList.remove("zoom");
+  document.getElementById("lbhint").textContent = UI[lang].zoomHint;
+  document.getElementById("lbx").setAttribute("aria-label", UI[lang].close);
+  lb.showModal();
+  document.body.style.overflow = "hidden";   /* keeps scrollY, unlike position:fixed */
+  try{ history.pushState({lb:1}, ""); lbPushed = true; }catch(e){ lbPushed = false; }
+  return true;
+}
+
+function lbClose(){
+  if(!lb.open) return;
+  lb.close();
+  lb.classList.remove("zoom");
+  lbImg.removeAttribute("src");
+  document.body.style.overflow = "";
+}
+
+/* Back button / gesture closes the viewer rather than leaving the page. */
+window.addEventListener("popstate", function(){
+  lbPushed = false;
+  lbClose();
+});
+
+/* Dismissing any other way rewinds the history entry we pushed. */
+function lbDismiss(){
+  if(lbPushed){ history.back(); }             /* popstate handler does the closing */
+  else { lbClose(); }
+}
+document.getElementById("lbx").addEventListener("click", lbDismiss);
+lb.addEventListener("cancel", function(e){ e.preventDefault(); lbDismiss(); });
+
+/* Tap the image to zoom in on the spot you tapped (pan by scrolling from
+   there); tap anywhere else to close. */
+document.getElementById("lbscroll").addEventListener("click", function(e){
+  if(e.target !== lbImg){ lbDismiss(); return; }
+  var sc = this;
+  if(lb.classList.contains("zoom")){ lb.classList.remove("zoom"); return; }
+  var r = lbImg.getBoundingClientRect(),
+      fx = (e.clientX - r.left) / r.width,
+      fy = (e.clientY - r.top)  / r.height;
+  lb.classList.add("zoom");
+  /* reading scrollWidth forces the reflow, so these land on the new size */
+  sc.scrollLeft = fx * sc.scrollWidth  - sc.clientWidth  / 2;
+  sc.scrollTop  = fy * sc.scrollHeight - sc.clientHeight / 2;
+});
+
+/* Intercept every image link — area thumbnails and the sketch at the top. */
+function lbBind(root){
+  root.addEventListener("click", function(e){
+    var a = e.target.closest && e.target.closest("a.ashot-link, a#shotlink, a#shottap");
+    if(!a) return;
+    var fig = a.closest(".areashot"),
+        cap = fig ? (fig.querySelector(".ashot-cap")||{}).textContent
+                  : (UI[lang].cap||"").replace(/<[^>]*>/g,"");
+    if(lbOpen(a.getAttribute("href"), cap)) e.preventDefault();
+  });
+}
+lbBind(document.getElementById("panel"));    /* re-rendered often — bound to the container */
+lbBind(document.getElementById("shot"));
 
 window.addEventListener("resize", measure);
 window.addEventListener("orientationchange", measure);
