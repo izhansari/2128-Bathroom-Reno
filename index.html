@@ -341,8 +341,8 @@ var AREA_IMAGES = {
      en:"Wall layout — 3 tiles down from the top, then the niche opening",
      es:"Trazo de la pared — 3 losetas desde arriba, luego la abertura del nicho"},
     {f:"Tile_ShowerFloor.png",
-     en:"Shower floor + ledge — flute direction",
-     es:"Piso de la ducha y repisa — dirección de las ranuras"}
+     en:"Shower floor + entrance ledge — flute direction",
+     es:"Piso de la ducha y borde de entrada — dirección de las ranuras"}
   ],
   vanity: [
     {f:"vanity1.jpeg", en:"Reference photo", es:"Foto de referencia"},
@@ -366,8 +366,8 @@ var AREA_IMAGES = {
 /* Tile + grout joint at a glance, per area. */
 var AREA_TILE = {
   shower:{
-    en:'<b>Walls:</b> white subway '+d('2.5" × 7.75"')+', grout '+d('1/8"')+' or '+d('1/16"')+' &nbsp;·&nbsp; <b>Niche:</b> white marble '+d('2×4')+' &nbsp;·&nbsp; <b>Floor + ledge:</b> brown fluted '+d('8×8')+', grout '+d('1/8"')+'',
-    es:'<b>Paredes:</b> subway blanco '+d('2.5" × 7.75"')+', junta '+d('1/8"')+' o '+d('1/16"')+' &nbsp;·&nbsp; <b>Nicho:</b> mármol blanco '+d('2×4')+' &nbsp;·&nbsp; <b>Piso y repisa:</b> acanalada café '+d('8×8')+', junta '+d('1/8"')+''},
+    en:'<b>Walls:</b> white subway '+d('2.5" × 7.75"')+', grout '+d('1/8"')+' or '+d('1/16"')+' &nbsp;·&nbsp; <b>Niche:</b> white marble '+d('2×4')+' &nbsp;·&nbsp; <b>Floor + entrance ledge:</b> brown fluted '+d('8×8')+', grout '+d('1/8"')+'',
+    es:'<b>Paredes:</b> subway blanco '+d('2.5" × 7.75"')+', junta '+d('1/8"')+' o '+d('1/16"')+' &nbsp;·&nbsp; <b>Nicho:</b> mármol blanco '+d('2×4')+' &nbsp;·&nbsp; <b>Piso y borde de entrada:</b> acanalada café '+d('8×8')+', junta '+d('1/8"')+''},
   vanity:{
     en:'<b>Wall:</b> white marble '+d('2×4')+' &nbsp;·&nbsp; grout width <b>still to be confirmed</b>',
     es:'<b>Pared:</b> mármol blanco '+d('2×4')+' &nbsp;·&nbsp; ancho de junta <b>pendiente de confirmar</b>'},
@@ -430,7 +430,7 @@ var ITEMS = [
 {id:"s8", a:"shower", t:"electrical",
  en:'Low-voltage <b>LED inside the niche</b>, trimless plaster-in channel.',
  es:'<b>LED de bajo voltaje dentro del nicho</b>, canal empotrado sin marco.'},
-{id:"s9", a:"shower", t:"tile", flag:"change",
+{id:"s9", a:"shower", t:"tile",
  en:'Walls: <b>white subway '+d('2.5" × 7.75"')+'</b> — <b>straight vertical stack, NO stagger</b>.',
  es:'Paredes: <b>subway blanco '+d('2.5" × 7.75"')+'</b> — <b>alineado vertical, SIN traslape</b>.'},
 {id:"s14", a:"shower", t:"tile",
@@ -442,9 +442,6 @@ var ITEMS = [
 {id:"s10", a:"shower", t:"tile", flag:"change",
  en:'Floor: <b>brown fluted '+d('8×8')+'</b>, grout '+d('1/8"')+'. Lay so the <b>long lines run toward the NICHE wall</b>.',
  es:'Piso: <b>acanalada café '+d('8×8')+'</b>, junta de '+d('1/8"')+'. Colocar para que las <b>líneas largas corran hacia la pared del NICHO</b>.'},
-{id:"s16", a:"shower", t:"tile",
- en:'Ledge: lay the tiles so the <b>long lines run toward the VANITY wall</b> — turned 90° from the shower floor.',
- es:'Repisa: colocar las losetas para que las <b>líneas largas corran hacia la pared del LAVABO</b> — giradas 90° respecto al piso de la ducha.'},
 {id:"s11", a:"shower", t:"tile",
  en:'Niche: <b>white marble '+d('2×4')+'</b>. Back face is <b>one full piece</b>; tile the return edges too.',
  es:'Nicho: <b>mármol blanco '+d('2×4')+'</b>. El fondo es <b>una sola pieza</b>; azulejar también los cantos.'},
@@ -521,8 +518,8 @@ var ITEMS = [
  en:'<b>Grout colors are still TBD.</b> Do not set anything until they are confirmed.',
  es:'<b>El color de la lechada está pendiente.</b> No pegar nada hasta confirmar.'},
 {id:"a5", a:"all", t:"tile",
- en:'Main floor: <b>matte gray '+d('2×4')+'</b>, grout '+d('1/16"')+'. Runs <b>long-ways toward the shower</b> and <b>short-ways toward the vanity</b>, so the floor tile, the fluted shower floor, and the shower wall all run the <b>same direction, floor to wall</b>.',
- es:'Piso principal: <b>gris mate '+d('2×4')+'</b>, junta de '+d('1/16"')+'. Corre <b>a lo largo hacia la ducha</b> y <b>a lo ancho hacia el lavabo</b>, para que el piso, el piso acanalado de la ducha y la pared de la ducha corran en la <b>misma dirección, del piso a la pared</b>.'},
+ en:'Main floor: <b>matte gray '+d('2×4')+'</b>, grout '+d('1/16"')+'. Runs <b>long-ways toward the VANITY</b> and <b>short-ways toward the TOILET</b>.',
+ es:'Piso principal: <b>gris mate '+d('2×4')+'</b>, junta de '+d('1/16"')+'. Corre <b>a lo largo hacia el LAVABO</b> y <b>a lo ancho hacia el INODORO</b>.'},
 {id:"a6", a:"all", t:"tile",
  en:'<b>Main floor starting point:</b> set the first FULL tile <b>just outside the toilet nook, in line with the shower ledge</b>, and work out from there. (See the floor layout drawing in this section.)',
  es:'<b>Punto de arranque del piso:</b> poner la primera loseta COMPLETA <b>justo afuera del nicho del inodoro, alineada con la repisa de la ducha</b>, y seguir desde ahí. (Ver el dibujo del piso en esta sección.)'}

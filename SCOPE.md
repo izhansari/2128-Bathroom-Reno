@@ -17,7 +17,7 @@
 - Showerheads + body sprays → **LEFT short wall** (opposite controls)
 - **Rainfall head mounted to the CEILING**
 - **Niche: 48" wide × 17" high**, on the right side, with **LED inside**
-- Shower walls: white subway 8.5" × 2.5" — **stacked straight vertical, NO stagger**
+- Shower walls: white subway 2.5" × 7.75" — **stacked straight vertical, NO stagger**
 - Shower floor: fluted tile, run **long-ways as seen from the entrance**, flutes pointing toward drain
 - **Niche grout lines must line up with subway grout lines.** Dry-lay first.
 
@@ -83,7 +83,7 @@
 
 ## TILE
 
-- [ ] Shower walls: white subway 8.5×2.5 — **straight vertical stack, no stagger**
+- [ ] Shower walls: white subway 2.5×7.75 — **straight vertical stack, no stagger**
 - [ ] Shower floor: fluted tile, **long-ways from the entrance**, flutes toward drain
 - [ ] Niche: 2×4 marble-look — **back face is one full piece**; tile the return edges too
 - [ ] **DRY-LAY FIRST** — confirm niche top/bottom hit the subway grout lines before setting anything
@@ -133,7 +133,7 @@
 - Regaderas y rociadores → **pared corta IZQUIERDA** (lado opuesto a las llaves)
 - **Regadera tipo lluvia montada en el TECHO**
 - **Nicho: 48" de ancho × 17" de alto**, lado derecho, con **LED adentro**
-- Paredes: azulejo tipo metro (subway) blanco 8.5" × 2.5" — **alineado vertical en cuadrícula, SIN traslape**
+- Paredes: azulejo tipo metro (subway) blanco 2.5" × 7.75" — **alineado vertical en cuadrícula, SIN traslape**
 - Piso: loseta acanalada (fluted), **a lo largo visto desde la entrada**, las ranuras apuntando a la coladera
 - **Las juntas del nicho deben alinearse con las juntas del subway.** Hacer prueba en seco primero.
 
@@ -199,7 +199,7 @@
 
 ## AZULEJO
 
-- [ ] Paredes de regadera: subway blanco 8.5×2.5 — **alineado vertical, sin traslape**
+- [ ] Paredes de regadera: subway blanco 2.5×7.75 — **alineado vertical, sin traslape**
 - [ ] Piso de regadera: loseta acanalada, **a lo largo desde la entrada**, ranuras hacia la coladera
 - [ ] Nicho: 2×4 tipo mármol — **el fondo es UNA sola pieza**; también azulejar los cantos/retornos
 - [ ] **PRUEBA EN SECO PRIMERO** — confirmar que arriba y abajo del nicho caen en las juntas del subway antes de pegar nada
