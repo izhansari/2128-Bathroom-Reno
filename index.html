@@ -116,8 +116,14 @@
   /* ---------- per-area photos ---------- */
   .ashots{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin:4px 0 16px}
   .areashot{
-    position:relative;min-height:120px;margin:0;overflow:hidden;
+    margin:0;overflow:hidden;
     border:1px solid var(--rule);border-radius:4px;background:var(--card);
+  }
+  /* media box holds the placeholder + image; caption sits below it */
+  .ashot-media{position:relative;display:block;min-height:120px}
+  .ashot-cap{
+    display:block;font-size:12px;line-height:1.45;color:var(--muted);
+    padding:8px 10px;border-top:1px solid var(--rule);
   }
   /* labelled placeholder fills the slot until the photo loads */
   .ashot-ph{
@@ -142,6 +148,24 @@
   .adesc.a-vanity{border-left-color:#8a3f9e}
   .adesc.a-toilet{border-left-color:#3f7d36}
   .adesc.a-all{border-left-color:#566172}
+
+  /* tile + grout spec strip */
+  .tilespec{
+    margin:0 0 14px;padding:10px 12px;font-size:13.5px;line-height:1.6;color:var(--ink);
+    background:var(--chip);border:1px solid var(--rule);border-radius:4px;
+  }
+  .tilespec-h{
+    display:block;font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+    font-weight:800;color:var(--muted);margin-bottom:5px;
+  }
+
+  /* downloadable drawings */
+  .adocs{margin:0 0 14px;display:flex;flex-wrap:wrap;gap:8px}
+  .adocs a{
+    display:inline-block;font-size:13px;font-weight:700;text-decoration:none;line-height:20px;
+    color:var(--focus);background:var(--card);border:1px solid var(--rule);
+    border-radius:4px;padding:10px 12px;
+  }
 
   /* ---------- open questions ---------- */
   .open{
@@ -310,9 +334,53 @@ function d(s){return '<span class="dim">'+s+'</span>';}
 /* Reference photos per area. Drop these files in the repo root and they show up
    automatically; until then each slot shows a labelled placeholder. */
 var AREA_IMAGES = {
-  shower: ["shower1.jpeg"],
-  vanity: ["vanity1.jpeg","vanity2.jpeg"],
-  toilet: ["toilet1.jpeg","toilet2.jpeg"]
+  shower: [
+    {f:"shower1.jpeg",
+     en:"Reference photo", es:"Foto de referencia"},
+    {f:"Tile_ShowerNiche.png",
+     en:"Wall layout — 3 tiles down from the top, then the niche opening",
+     es:"Trazo de la pared — 3 losetas desde arriba, luego la abertura del nicho"},
+    {f:"Tile_ShowerFloor.png",
+     en:"Shower floor + ledge — flute direction",
+     es:"Piso de la ducha y repisa — dirección de las ranuras"}
+  ],
+  vanity: [
+    {f:"vanity1.jpeg", en:"Reference photo", es:"Foto de referencia"},
+    {f:"vanity2.jpeg", en:"Reference photo", es:"Foto de referencia"},
+    {f:"Tile_Vanity.png",
+     en:"Tile layout — full tile at top right",
+     es:"Trazo del azulejo — loseta completa arriba a la derecha"}
+  ],
+  toilet: [
+    {f:"toilet1.jpeg", en:"Reference photo", es:"Foto de referencia"},
+    {f:"toilet2.jpeg",
+     en:"Construction plan — dimensions", es:"Plano de construcción — medidas"}
+  ],
+  all: [
+    {f:"Tile_Floor.png",
+     en:"Main floor — first full tile just outside the toilet nook, in line with the shower ledge",
+     es:"Piso principal — primera loseta completa afuera del nicho del inodoro, alineada con la repisa"}
+  ]
+};
+
+/* Tile + grout joint at a glance, per area. */
+var AREA_TILE = {
+  shower:{
+    en:'<b>Walls:</b> white subway '+d('2.5" × 7.75"')+', grout '+d('1/8"')+' or '+d('1/16"')+' &nbsp;·&nbsp; <b>Niche:</b> white marble '+d('2×4')+' &nbsp;·&nbsp; <b>Floor + ledge:</b> brown fluted '+d('8×8')+', grout '+d('1/8"')+'',
+    es:'<b>Paredes:</b> subway blanco '+d('2.5" × 7.75"')+', junta '+d('1/8"')+' o '+d('1/16"')+' &nbsp;·&nbsp; <b>Nicho:</b> mármol blanco '+d('2×4')+' &nbsp;·&nbsp; <b>Piso y repisa:</b> acanalada café '+d('8×8')+', junta '+d('1/8"')+''},
+  vanity:{
+    en:'<b>Wall:</b> white marble '+d('2×4')+' &nbsp;·&nbsp; grout width <b>still to be confirmed</b>',
+    es:'<b>Pared:</b> mármol blanco '+d('2×4')+' &nbsp;·&nbsp; ancho de junta <b>pendiente de confirmar</b>'},
+  all:{
+    en:'<b>Main floor:</b> matte gray '+d('2×4')+', grout '+d('1/16"')+'',
+    es:'<b>Piso principal:</b> gris mate '+d('2×4')+', junta '+d('1/16"')+''}
+};
+
+/* Downloadable drawings, per area. */
+var AREA_DOCS = {
+  shower:[{f:"Drawing_ShowerWallAndNiche.pdf",
+           en:"Dimensioned drawing — shower wall & niche (PDF)",
+           es:"Plano acotado — pared de la ducha y nicho (PDF)"}]
 };
 
 /* Plain-language "what this area should end up as" — the goal, so a worker can
@@ -357,23 +425,32 @@ var ITEMS = [
  en:'Rainfall head mounted in the <b>CEILING</b>.',
  es:'Regadera tipo lluvia montada en el <b>TECHO</b>.'},
 {id:"s7", a:"shower", t:"plumbing",
- en:'Slope the floor to the drain. Flutes run toward the drain.',
- es:'Dar caída al piso hacia la coladera. Las ranuras corren hacia el desagüe.'},
+ en:'Slope the floor to the drain. (Flute direction is set by the tile items — see Tile.)',
+ es:'Dar caída al piso hacia la coladera. (La dirección de las ranuras la define el azulejo — ver Azulejo.)'},
 {id:"s8", a:"shower", t:"electrical",
  en:'Low-voltage <b>LED inside the niche</b>, trimless plaster-in channel.',
  es:'<b>LED de bajo voltaje dentro del nicho</b>, canal empotrado sin marco.'},
-{id:"s9", a:"shower", t:"tile",
- en:'Walls: white subway '+d('8.5" × 2.5"')+' — <b>straight vertical stack, NO stagger</b>.',
- es:'Paredes: subway blanco '+d('8.5" × 2.5"')+' — <b>alineado vertical, SIN traslape</b>.'},
-{id:"s10", a:"shower", t:"tile",
- en:'Floor: fluted tile, run <b>long-ways as seen from the entrance</b>, flutes pointing toward the drain.',
- es:'Piso: loseta acanalada, <b>a lo largo visto desde la entrada</b>, las ranuras apuntando a la coladera.'},
+{id:"s9", a:"shower", t:"tile", flag:"change",
+ en:'Walls: <b>white subway '+d('2.5" × 7.75"')+'</b> — <b>straight vertical stack, NO stagger</b>.',
+ es:'Paredes: <b>subway blanco '+d('2.5" × 7.75"')+'</b> — <b>alineado vertical, SIN traslape</b>.'},
+{id:"s14", a:"shower", t:"tile",
+ en:'Wall grout joints: '+d('1/8"')+' or '+d('1/16"')+' — <b>whichever the tile setter recommends</b>. Pick one and keep it consistent.',
+ es:'Juntas de la pared: '+d('1/8"')+' o '+d('1/16"')+' — <b>lo que recomiende el azulejero</b>. Elegir una y mantenerla igual.'},
+{id:"s15", a:"shower", t:"tile",
+ en:'<b>Wall sequence:</b> start with a FULL tile at <b>TOP RIGHT</b>. Lay <b>3 tiles down</b> from the top, then start the niche and run it down about '+d('16"')+' so it lands on the grout lines. Then carry the tile all the way down. (See the wall layout drawing above.)',
+ es:'<b>Orden de la pared:</b> empezar con loseta COMPLETA <b>ARRIBA A LA DERECHA</b>. Bajar <b>3 losetas</b> desde arriba, luego empezar el nicho y bajarlo unas '+d('16"')+' para que caiga en las juntas. Después seguir con la loseta hasta abajo. (Ver el dibujo de arriba.)'},
+{id:"s10", a:"shower", t:"tile", flag:"change",
+ en:'Floor: <b>brown fluted '+d('8×8')+'</b>, grout '+d('1/8"')+'. Lay so the <b>long lines run toward the NICHE wall</b>.',
+ es:'Piso: <b>acanalada café '+d('8×8')+'</b>, junta de '+d('1/8"')+'. Colocar para que las <b>líneas largas corran hacia la pared del NICHO</b>.'},
+{id:"s16", a:"shower", t:"tile",
+ en:'Ledge: lay the tiles so the <b>long lines run toward the VANITY wall</b> — turned 90° from the shower floor.',
+ es:'Repisa: colocar las losetas para que las <b>líneas largas corran hacia la pared del LAVABO</b> — giradas 90° respecto al piso de la ducha.'},
 {id:"s11", a:"shower", t:"tile",
- en:'Niche: '+d('2×4')+' marble-look. Back face is <b>one full piece</b>; tile the return edges too.',
- es:'Nicho: mármol '+d('2×4')+'. El fondo es <b>una sola pieza</b>; azulejar también los cantos.'},
+ en:'Niche: <b>white marble '+d('2×4')+'</b>. Back face is <b>one full piece</b>; tile the return edges too.',
+ es:'Nicho: <b>mármol blanco '+d('2×4')+'</b>. El fondo es <b>una sola pieza</b>; azulejar también los cantos.'},
 {id:"s12", a:"shower", t:"tile",
- en:'<b>DRY-LAY FIRST.</b> Niche top and bottom must land on the subway grout lines.',
- es:'<b>PRUEBA EN SECO PRIMERO.</b> Arriba y abajo del nicho deben caer en las juntas del subway.'},
+ en:'<b>DRY-LAY FIRST.</b> Niche top and bottom must land on the wall grout lines. Check against the layout drawing and the dimensioned PDF before setting anything.',
+ es:'<b>PRUEBA EN SECO PRIMERO.</b> Arriba y abajo del nicho deben caer en las juntas de la pared. Revisar con el dibujo y el plano acotado antes de pegar nada.'},
 
 /* ---- VANITY ---- */
 {id:"v1", a:"vanity", t:"general",
@@ -404,11 +481,11 @@ var ITEMS = [
  en:'<b>3-gang</b> in the existing box left of the vanity: <b>1)</b> vanity LED &nbsp;<b>2)</b> can lights &nbsp;<b>3)</b> exhaust fan.',
  es:'<b>3 apagadores</b> en la caja existente a la izquierda del mueble: <b>1)</b> LED del mueble &nbsp;<b>2)</b> luces empotradas &nbsp;<b>3)</b> extractor.'},
 {id:"v10", a:"vanity", t:"tile",
- en:'Tile: '+d('2×4')+' marble-look — <b>straight vertical stack, NO stagger</b>.',
- es:'Azulejo: mármol '+d('2×4')+' — <b>alineado vertical, SIN traslape</b>.'},
+ en:'Tile: <b>white marble '+d('2×4')+'</b> — <b>straight vertical stack, NO stagger</b>.',
+ es:'Azulejo: <b>mármol blanco '+d('2×4')+'</b> — <b>alineado vertical, SIN traslape</b>.'},
 {id:"v11", a:"vanity", t:"tile",
- en:'<b>Start with a FULL tile at TOP RIGHT.</b> Work left and down. Cuts land on the <b>left edge and bottom row only</b>. (See the sketch, top left.)',
- es:'<b>Empezar con loseta COMPLETA ARRIBA A LA DERECHA.</b> Seguir a la izquierda y hacia abajo. Los cortes solo van en el <b>borde izquierdo y la fila de abajo</b>. (Ver el croquis, arriba a la izquierda.)'},
+ en:'<b>Start with a FULL tile at TOP RIGHT.</b> Work left and down. Cuts land on the <b>left edge and bottom row only</b>. (See the layout drawing above.)',
+ es:'<b>Empezar con loseta COMPLETA ARRIBA A LA DERECHA.</b> Seguir a la izquierda y hacia abajo. Los cortes solo van en el <b>borde izquierdo y la fila de abajo</b>. (Ver el dibujo de arriba.)'},
 
 /* ---- TOILET ---- */
 {id:"t1", a:"toilet", t:"framing", flag:"change",
@@ -444,8 +521,11 @@ var ITEMS = [
  en:'<b>Grout colors are still TBD.</b> Do not set anything until they are confirmed.',
  es:'<b>El color de la lechada está pendiente.</b> No pegar nada hasta confirmar.'},
 {id:"a5", a:"all", t:"tile",
- en:'Main floor tile runs <b>long-ways toward the shower</b> and <b>short-ways toward the vanity</b>. This keeps the floor tile, the shower\'s fluted floor, and the shower wall tile all running the <b>same direction, floor to wall</b>.',
- es:'La loseta del piso principal corre <b>a lo largo hacia la ducha</b> y <b>a lo ancho hacia el lavabo</b>. Así la loseta del piso, el piso acanalado de la ducha y el azulejo de la pared de la ducha corren en la <b>misma dirección, del piso a la pared</b>.'}
+ en:'Main floor: <b>matte gray '+d('2×4')+'</b>, grout '+d('1/16"')+'. Runs <b>long-ways toward the shower</b> and <b>short-ways toward the vanity</b>, so the floor tile, the fluted shower floor, and the shower wall all run the <b>same direction, floor to wall</b>.',
+ es:'Piso principal: <b>gris mate '+d('2×4')+'</b>, junta de '+d('1/16"')+'. Corre <b>a lo largo hacia la ducha</b> y <b>a lo ancho hacia el lavabo</b>, para que el piso, el piso acanalado de la ducha y la pared de la ducha corran en la <b>misma dirección, del piso a la pared</b>.'},
+{id:"a6", a:"all", t:"tile",
+ en:'<b>Main floor starting point:</b> set the first FULL tile <b>just outside the toilet nook, in line with the shower ledge</b>, and work out from there. (See the floor layout drawing in this section.)',
+ es:'<b>Punto de arranque del piso:</b> poner la primera loseta COMPLETA <b>justo afuera del nicho del inodoro, alineada con la repisa de la ducha</b>, y seguir desde ahí. (Ver el dibujo del piso en esta sección.)'}
 ];
 
 /* open:true items also surface in the red "Open Questions" box at the top */
@@ -454,8 +534,11 @@ var CONSIDER = [
   en:'<b>Grout colors</b> — pick one per tile type (niche marble, subway, fluted floor, vanity marble) before anyone sets.',
   es:'<b>Color de lechada</b> — elegir uno por cada tipo de loseta antes de que alguien empiece a pegar.'},
  {open:true,
-  en:'The '+d('48" × 17"')+' niche is <b>tile size only</b> — grout joints are not accounted for. Dry-lay before the framing closes.',
-  es:'El nicho '+d('48" × 17"')+' es <b>medida de loseta solamente</b> — no incluye las juntas. Prueba en seco antes de cerrar el enmarcado.'},
+  en:'<b>Vanity wall grout width is not set.</b> Shower wall is '+d('1/8"')+' or '+d('1/16"')+', shower floor '+d('1/8"')+', main floor '+d('1/16"')+' — the vanity wall still needs a number.',
+  es:'<b>Falta el ancho de junta de la pared del lavabo.</b> Pared de la ducha '+d('1/8"')+' o '+d('1/16"')+', piso de la ducha '+d('1/8"')+', piso principal '+d('1/16"')+' — falta el número del lavabo.'},
+ {open:true,
+  en:'The '+d('48" × 17"')+' niche is <b>tile size only</b> — grout joints are not accounted for, and the drop to the niche is "about '+d('16"')+'". Dry-lay against the layout drawing and the dimensioned PDF before the framing closes.',
+  es:'El nicho '+d('48" × 17"')+' es <b>medida de loseta solamente</b> — no incluye las juntas, y la bajada al nicho es de "unas '+d('16"')+'". Prueba en seco con el dibujo y el plano acotado antes de cerrar el enmarcado.'},
  {open:true,
   en:'<b>Neutral in both switch boxes.</b> The 2-gang was wired for a plain bulb — check for a neutral before the walls close, or the dimmers will not work.',
   es:'<b>Neutro en las dos cajas.</b> La caja de 2 se cableó para un foco simple — revisar que haya neutro antes de cerrar, o los dimmers no funcionarán.'},
@@ -496,7 +579,7 @@ var UI = {
       print:"Print / Save as PDF",
       cap:"<b>Reference sketch.</b> Top left is the vanity wall tile layout — F = full tile, C = cut tile.",
       tap:"Tap to enlarge ↗",
-      photoAdd:"Photo —",
+      photoAdd:"Photo —", tileLabel:"Tile & grout",
       allDone:"all done",
       nothing:"Nothing here yet.",
       missing:'<b>Sketch photo not uploaded yet.</b> Drop the photo in the repo root next to <code>index.html</code>, named <code>sketch.jpg</code> (or <code>.jpeg</code> / <code>.png</code>) — it will show up here automatically.'},
@@ -510,7 +593,7 @@ var UI = {
       print:"Imprimir / Guardar PDF",
       cap:"<b>Croquis de referencia.</b> Arriba a la izquierda es el trazo del azulejo de la pared del lavabo — F = loseta completa, C = loseta cortada.",
       tap:"Tocar para ampliar ↗",
-      photoAdd:"Foto —",
+      photoAdd:"Foto —", tileLabel:"Azulejo y junta",
       allDone:"todo hecho",
       nothing:"Nada aquí todavía.",
       missing:'<b>Falta subir la foto del croquis.</b> Poner la foto en la raíz del repo, junto a <code>index.html</code>, con el nombre <code>sketch.jpg</code> (o <code>.jpeg</code> / <code>.png</code>) — aparecerá aquí automáticamente.'}
@@ -546,20 +629,38 @@ function areaDescHTML(areaId){
   return '<p class="adesc a-'+areaId+'">'+desc[lang]+'</p>';
 }
 
+function areaTileHTML(areaId){
+  var t = AREA_TILE[areaId];
+  if(!t) return "";
+  return '<p class="tilespec"><span class="tilespec-h">'+UI[lang].tileLabel+'</span>'+t[lang]+'</p>';
+}
+
 function areaShotsHTML(areaId){
   var imgs = AREA_IMAGES[areaId];
   if(!imgs || !imgs.length) return "";
   var h = '<div class="ashots">';
   for(var i=0;i<imgs.length;i++){
-    var f = imgs[i];
+    var im = imgs[i], f = im.f, cap = im[lang];
     h += '<figure class="areashot">'+
-           '<a class="ashot-link" href="'+f+'" target="_blank" rel="noopener">'+
-             '<img src="'+f+'" alt="Reference photo '+f+'" loading="lazy">'+
-           '</a>'+
-           '<span class="ashot-ph"><b>'+UI[lang].photoAdd+'</b> <code>'+f+'</code></span>'+
+           '<span class="ashot-media">'+
+             '<span class="ashot-ph"><b>'+UI[lang].photoAdd+'</b> <code>'+f+'</code></span>'+
+             '<a class="ashot-link" href="'+f+'" target="_blank" rel="noopener">'+
+               '<img src="'+f+'" alt="'+cap+'" loading="lazy">'+
+             '</a>'+
+           '</span>'+
+           '<figcaption class="ashot-cap">'+cap+'</figcaption>'+
          '</figure>';
   }
   return h + '</div>';
+}
+
+function areaDocsHTML(areaId){
+  var docs = AREA_DOCS[areaId];
+  if(!docs || !docs.length) return "";
+  var h = '<p class="adocs">';
+  for(var i=0;i<docs.length;i++)
+    h += '<a href="'+docs[i].f+'" target="_blank" rel="noopener">'+docs[i][lang]+' ↗</a>';
+  return h + '</p>';
 }
 
 function sectionHTML(secId, title, items, badgeGroup, topHTML){
@@ -614,7 +715,9 @@ function render(){
     for(var a=0;a<AREAS.length;a++){
       var grp = ITEMS.filter(function(x){return x.a===AREAS[a].id;});
       if(!grp.length) continue;
-      h += sectionHTML(AREAS[a].id, AREAS[a][lang], grp, "trade", areaDescHTML(AREAS[a].id)+areaShotsHTML(AREAS[a].id));
+      h += sectionHTML(AREAS[a].id, AREAS[a][lang], grp, "trade",
+             areaDescHTML(AREAS[a].id)+areaTileHTML(AREAS[a].id)+
+             areaShotsHTML(AREAS[a].id)+areaDocsHTML(AREAS[a].id));
       chips += chipHTML(AREAS[a].id, shortOf(AREAS[a]));
     }
   } else if(view==="trade"){

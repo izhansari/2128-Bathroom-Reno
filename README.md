@@ -35,31 +35,45 @@ broken image — everything else on the page still works.
 To use a different filename entirely, edit the `SHOT_NAMES` array near the bottom
 of the `<script>` block in `index.html`.
 
-## Per-area photos
+## Per-area photos and drawings
 
-Each area section in the **By Area** view has photo slots at the top. Drop these
-files in the repo root and they appear automatically; until then each slot shows a
-labelled placeholder (`Photo — vanity1.jpeg`).
+Each area section in the **By Area** view shows photos and tile layout drawings at
+the top, each with a caption. Drop the files in the repo root and they appear
+automatically; until then a slot shows a labelled placeholder (`Photo — vanity1.jpeg`).
 
-| Area    | Files |
-|---------|-------|
-| Shower  | `shower1.jpeg` |
-| Vanity  | `vanity1.jpeg`, `vanity2.jpeg` |
-| Toilet  | `toilet1.jpeg` |
+| Area           | Files |
+|----------------|-------|
+| Shower         | `shower1.jpeg`, `Tile_ShowerNiche.png`, `Tile_ShowerFloor.png` |
+| Vanity         | `vanity1.jpeg`, `vanity2.jpeg`, `Tile_Vanity.png` |
+| Toilet         | `toilet1.jpeg`, `toilet2.jpeg` |
+| Whole Bathroom | `Tile_Floor.png` |
 
-To add, remove, or rename slots, edit the `AREA_IMAGES` map near the top of the
-`<script>` block in `index.html`:
+Edit the `AREA_IMAGES` map near the top of the `<script>` block in `index.html`.
+Each entry is a filename plus its EN/ES caption:
 
 ```js
 var AREA_IMAGES = {
-  shower: ["shower1.jpeg"],
-  vanity: ["vanity1.jpeg","vanity2.jpeg"],
-  toilet: ["toilet1.jpeg"]
+  shower: [
+    {f:"shower1.jpeg", en:"Reference photo", es:"Foto de referencia"},
+    {f:"Tile_ShowerNiche.png", en:"Wall layout — …", es:"Trazo de la pared — …"}
+  ],
+  …
 };
 ```
 
 These names are exact (unlike the top sketch, which tries several extensions), so
 match the filename to what is listed here. Empty slots are hidden when printing.
+
+## Tile schedule and drawings
+
+Two more maps sit next to `AREA_IMAGES`:
+
+- **`AREA_TILE`** — the "Tile & grout" strip under each area's summary: which tile and
+  what joint width. Currently set for shower, vanity, and whole bathroom.
+- **`AREA_DOCS`** — downloadable drawings linked at the bottom of an area. Currently
+  `Drawing_ShowerWallAndNiche.pdf` under Shower.
+
+Both are keyed by area id and render nothing when an area has no entry.
 
 ## Deploying on Vercel
 
